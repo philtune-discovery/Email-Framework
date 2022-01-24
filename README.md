@@ -1,6 +1,6 @@
 # Email Framework
 
-This is a framework for us to build out consistent, error-free emails. The goal is to not have to think about HOW to build a bulletproof email.
+This is a framework for us to build out consistent, error-free emails. Still very much a work in progress. The goal is to not have to think about HOW to build a bulletproof email.
 
 Initially authored by [Phil Tune](mailto:phillip_tune@discovery.com) in Jan 2022.
 
