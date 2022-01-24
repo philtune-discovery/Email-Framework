@@ -1,0 +1,9 @@
+@mixin mobile_only_cell {
+	display: none;
+	mso-hide: all;
+	@include mobile {
+		display: table-cell !important;
+		mso-hide: none !important;
+		@content;
+	}
+}

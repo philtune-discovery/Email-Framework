@@ -1,0 +1,6 @@
+@mixin desktop_only {
+	@include mobile {
+		display: none !important;
+		mso-hide: all !important;
+	}
+}

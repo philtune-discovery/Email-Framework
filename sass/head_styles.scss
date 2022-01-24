@@ -1,0 +1,15 @@
+@import 'variables';
+@import 'head/reset';
+
+.font-family {
+	font-family: $ff-sans;
+}
+
+@include desktop {
+	@-ms-viewport {
+		width: $container-width+18;
+	}
+	@viewport {
+		width: $container-width+18;
+	}
+}

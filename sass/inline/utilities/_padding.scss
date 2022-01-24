@@ -1,0 +1,31 @@
+@mixin padding($list: 10px) {
+	$top: nth($list, 1);
+	$right: $top;
+	$bottom: $top;
+	$left: $top;
+	@if length($list) > 1 {
+		$right: nth($list, 2);
+	}
+	@if length($list) > 2 {
+		$bottom: nth($list, 3);
+	} @else {
+		$left: $right;
+	}
+	@if length($list) > 3 {
+		$left: nth($list, 4);
+	} @else {
+		$left: $right;
+	}
+	&-top {
+		height: $top;
+	}
+	&-right {
+		width: $right;
+	}
+	&-bottom {
+		height: $bottom;
+	}
+	&-left {
+		width: $left;
+	}
+}

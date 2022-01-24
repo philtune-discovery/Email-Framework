@@ -1,0 +1,17 @@
+.m_intro {
+	@include padding(28px 22px 20px);
+	&-heading {
+		font-family: $ff-sans;
+		font-weight: $fw-bold;
+		font-size: 32px;
+		color: #444244;
+	}
+	&-p {
+		font-family: $ff-sans;
+		font-weight: $fw-light;
+		line-height: 23 / 18 * 1;
+		font-size: 18px;
+		font-style: italic;
+		color: #666666;
+	}
+}
