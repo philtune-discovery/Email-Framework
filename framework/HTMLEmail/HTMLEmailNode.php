@@ -93,7 +93,7 @@ class HTMLEmailNode
 		$this->nodeCollection->addChildren([
 			ElemNode::create('tr')->addChild(
 				ElemNode::create('td')->addChild(
-					table()->addChild(
+					HTMLEmail::table()->addChild(
 						ElemNode::create('tr')->addChildren(
 							array_map(function ($child) {
 								if ( is_array($child) ) {

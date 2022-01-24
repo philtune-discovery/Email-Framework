@@ -9,6 +9,7 @@ class HTMLEmail
 {
 
 	use hasHelpers;
+	use hasRoot;
 
 	public static function include(string $path)
 	{

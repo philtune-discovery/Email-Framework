@@ -2,60 +2,25 @@
 
 use DOM\DOM;
 use DOM\ElemNode;
+use DOM\NodeCollection;
 use DOM\SelfClosing;
 use DOM\TextNode;
-use HTMLEmail\Button;
 use HTMLEmail\HTMLEmail;
 use HTMLEmail\HTMLEmailNode;
-use JetBrains\PhpStorm\ArrayShape;
 
 function email(array $config = []):HTMLEmailNode
 {
-	if ( $parentPath = $config['inherit'] ?? null ) {
-		$parentNode = HTMLEmail::inherit($parentPath);
-		if ( $track = $config['track'] ) {
-			$parentNode->track($track);
-		}
-		return $parentNode;
-	}
+	return HTMLEmail::email($config);
 }
 
-/**
- * @param array|numeric $attrs
- * @param ...$children_
- * @return DOM
- */
-function col($attrs, ...$children_):DOM
+function col($attrs, ...$children_):ElemNode
 {
-	return is_array($attrs) ?
-		ElemNode::create('td', $attrs)->addChildren($children_) :
-		( empty($children_) ?
-			ElemNode::create('td', [
-				'width' => $attrs,
-				'style' => 'font-size:0px'
-			])
-			        ->useWhitespace(false)
-			        ->addChild(
-				        TextNode::create('&nbsp;')
-			        ) :
-			ElemNode::create('td', [
-				'width' => $attrs,
-			])->addChildren($children_)
-		);
+	return HTMLEmail::col($attrs, ...$children_);
 }
 
-function row($height):DOM
+function row($height):ElemNode
 {
-	return ElemNode::create('tr')->addChild(
-		ElemNode::create('td', [
-			'height' => $height,
-			'style'  => 'font-size:0px'
-		])
-		        ->useWhitespace(false)
-		        ->addChild(
-			        TextNode::create('&nbsp;')
-		        )
-	);
+	return HTMLEmail::row($height);
 }
 
 /**
@@ -63,38 +28,11 @@ function row($height):DOM
  * @param string|array|null $alt <p>img 'alt' OR array of attributes</p>
  * @param string|null $href
  * @param array $attrs
- * @return DOM
+ * @return SelfClosing|ElemNode
  */
-function img($src, $alt = null, string $href = null, array $attrs = []):DOM
+function img($src, $alt = null, string $href = null, array $attrs = [])
 {
-	if ( is_array($src) ) {
-		// 1st arg is config array
-		$attrs = $src;
-		$href = $attrs['href'] ?? null;
-	} elseif ( is_array($alt) ) {
-		// 2nd arg is attrs
-		$attrs = $alt;
-		$attrs['alt'] = $attrs['alt'] ?? '';
-		$attrs['src'] = $src;
-		$href = $attrs['href'] ?? null;
-	} else {
-		$attrs['src'] = $src;
-		$attrs['alt'] = $alt;
-	}
-	unset($attrs['href']);
-	$attrs['src'] = src($attrs['src']);
-	if ( $attrs['alt'] ?? null ) {
-		$style = ";font-family:'Helvetica Neue',Helvetica,Arial,sans-serif";
-		if ( isset($attrs['style']) ) {
-			$attrs['style'] .= $style;
-		} else {
-			$attrs['style'] = $style;
-		}
-	}
-	$imgNode = SelfClosing::create('img', $attrs);
-	return $href ?
-		ElemNode::create('a', ['href' => $href, 'target' => '_blank'])->addChild($imgNode) :
-		$imgNode;
+	return HTMLEmail::img($src, $alt, $href, $attrs);
 }
 
 /**
@@ -103,7 +41,7 @@ function img($src, $alt = null, string $href = null, array $attrs = []):DOM
  */
 function rows(...$children_):DOM
 {
-	return table()->addChildren($children_);
+	return HTMLEmail::rows(...$children_);
 }
 
 /**
@@ -113,24 +51,12 @@ function rows(...$children_):DOM
  */
 function p($string_or_node, array $attrs = []):ElemNode
 {
-	$child = is_string($string_or_node) ?
-		TextNode::create($string_or_node) :
-		$string_or_node;
-	return ElemNode::create('tr')->addChild(
-		ElemNode::create('td', $attrs)->addChild($child)
-	);
+	return HTMLEmail::p($string_or_node, $attrs);
 }
 
 function paragraphs(array $paragraphs, array $paragraph_attrs = [], $margin_height = 0):array
 {
-	$result = [];
-	foreach ( $paragraphs as $i => $paragraph ) {
-		if ( $i !== 0 ) {
-			$result[] = row($margin_height);
-		}
-		$result[] = p($paragraph, $paragraph_attrs);
-	}
-	return $result;
+	return HTMLEmail::paragraphs($paragraphs, $paragraph_attrs, $margin_height);
 }
 
 ;
@@ -156,42 +82,19 @@ function body():ElemNode
 	return HTMLEmail::body();
 }
 
-function getTableAttrs(array $mergeAttrs = [], array $mergeStyles = []):array
+function table(array $mergeAttrs = [], array $mergeStyles = []):ElemNode
 {
-	return array_merge([
-		'width'       => '100%',
-		'cellpadding' => 0,
-		'cellspacing' => 0,
-		'border'      => 0,
-		'role'        => 'presentation',
-		'style'       => toStyleStr([
-			'max-width'       => '100%',
-			'mso-cellspacing' => '0px',
-			'mso-padding-alt' => '0px 0px 0px 0px'
-		], $mergeStyles),
-	], $mergeAttrs);
+	return HTMLEmail::table($mergeAttrs, $mergeStyles);
 }
 
 function getTableAttrStr(array $mergeAttrs = [], array $mergeStyles = []):string
 {
-	return toAttrStr(getTableAttrs($mergeAttrs, $mergeStyles));
-}
-
-function table(array $mergeAttrs = [], array $mergeStyles = []):ElemNode
-{
-	return ElemNode::create('table', getTableAttrs($mergeAttrs, $mergeStyles));
-}
-
-function toAttrStr(array $attrs, ...$other_attrs):string
-{
-	$attrs = array_merge($attrs, ...$other_attrs);
-	return implode_kvps(' ', $attrs, fn($a, $b) => "$a=\"$b\"");
+	return HTMLEmail::getTableAttrStr($mergeAttrs, $mergeStyles);
 }
 
 function toStyleStr(array $arr, ...$other_arrs):string
 {
-	$arr = array_merge($arr, ...$other_arrs);
-	return implode_kvps(';', $arr, fn($a, $b) => "$a:$b");
+	return HTMLEmail::toStyleStr($arr, ...$other_arrs);
 }
 
 function padded(array $padding, array $children_)
@@ -204,4 +107,7 @@ function a(string $text, string $href, array $attrs = []):ElemNode
 	return HTMLEmail::a($text, $href, $attrs);
 }
 
-include 'email_start.php';
+function email_root(ElemNode $_body):NodeCollection
+{
+	return HTMLEmail::getRoot($_body);
+}

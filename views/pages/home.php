@@ -2,5 +2,4 @@
 
 use HTMLEmail\HTMLEmail;
 
-?>
-<?= HTMLEmail::include('main') ?>
+echo HTMLEmail::include('main');
