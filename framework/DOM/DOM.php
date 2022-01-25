@@ -61,7 +61,7 @@ class DOM
 
 	public function addSelfClosing(string $tagName, ?array $attrs = []):self
 	{
-		return $this->addChild(SelfClosing::create($tagName, $attrs));
+		return $this->addChild(SelfClosingNode::create($tagName, $attrs));
 	}
 
 }

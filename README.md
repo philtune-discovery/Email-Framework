@@ -33,10 +33,11 @@ Inside `/framework` are a few class directories and bootstrapping files.
 ## Usage
 
 On `/views/pages/home.php`:
-```php
-use HTMLEmail\HTMLEmail;
 
-echo HTMLEmail::include('main');
+```php
+use HTMLEmail\OLD\HTMLEmailz;
+
+echo HTMLEmailz::include('main');
 
 // TODO - finish usage documentation
 ```

@@ -3,11 +3,13 @@
 namespace HTMLEmail;
 
 use App\App;
+use App\Stylesheetz;
 use DOM\DOM;
 use DOM\ElemNode;
 use DOM\NodeCollection;
-use DOM\SelfClosing;
+use DOM\SelfClosingNode;
 use DOM\TextNode;
+use HTMLEmail\Button\Button;
 
 trait hasHelpers
 {
@@ -81,7 +83,7 @@ trait hasHelpers
 
 	public static function table(array $mergeAttrs = [], array $mergeStyles = []):ElemNode
 	{
-		return ElemNode::create('table', self::getTableAttrs($mergeAttrs, $mergeStyles));
+		return ElemNode::create('table', getTableAttrs($mergeAttrs, $mergeStyles));
 	}
 
 	public static function row($height):ElemNode
@@ -175,7 +177,7 @@ trait hasHelpers
 	 * @param string|array|null $alt <p>img 'alt' OR array of attributes</p>
 	 * @param string|null $href
 	 * @param array $attrs
-	 * @return SelfClosing|ElemNode
+	 * @return SelfClosingNode|ElemNode
 	 */
 	public static function img($src, $alt = null, string $href = null, array $attrs = [])
 	{
@@ -203,54 +205,39 @@ trait hasHelpers
 				$attrs['style'] = $style;
 			}
 		}
-		$imgNode = SelfClosing::create('img', $attrs);
+		$imgNode = SelfClosingNode::create('img', $attrs);
 		return $href ?
 			ElemNode::create('a', ['href' => $href, 'target' => '_blank'])->addChild($imgNode) :
 			$imgNode;
 	}
 
-	public static function getTableAttrs(array $mergeAttrs = [], array $mergeStyles = []):array
-	{
-		return array_merge([
-			'width'       => '100%',
-			'cellpadding' => 0,
-			'cellspacing' => 0,
-			'border'      => 0,
-			'role'        => 'presentation',
-			'style'       => toStyleStr([
-				'max-width'       => '100%',
-				'mso-cellspacing' => '0px',
-				'mso-padding-alt' => '0px 0px 0px 0px'
-			], $mergeStyles),
-		], $mergeAttrs);
-	}
+	private static array $styles = ['mobileStyles' => []];
 
-	public static function toStyleStr(array $arr, ...$other_arrs):string
+	public static function renderMobileStyles(array $mobileStyles = null):?string
 	{
-		$arr = array_merge($arr, ...$other_arrs);
-		return implode_kvps(';', $arr, fn($a, $b) => "$a:$b");
-	}
-
-	public static function toAttrStr(array $attrs, ...$other_attrs):string
-	{
-		$attrs = array_merge($attrs, ...$other_attrs);
-		return implode_kvps(' ', $attrs, fn($a, $b) => "$a=\"$b\"");
-	}
-
-	public static function getTableAttrStr(array $mergeAttrs = [], array $mergeStyles = []):string
-	{
-		return self::toAttrStr(self::getTableAttrs($mergeAttrs, $mergeStyles));
-	}
-
-	public static function email(array $config = []):?HTMLEmailNode
-	{
-		if ( $parentPath = $config['inherit'] ?? null ) {
-			$parentNode = HTMLEmail::inherit($parentPath);
-			if ( $track = $config['track'] ) {
-				$parentNode->track($track);
+		$globalMobileStyles =& self::$styles['mobileStyles'];
+		if ( $mobileStyles ) {
+			foreach ( $mobileStyles as $selector => $styles ) {
+				if ( !array_key_exists($selector, $globalMobileStyles) ) {
+					$globalMobileStyles[$selector] = [];
+				}
+				foreach ( $styles as $prop => $val ) {
+					$globalMobileStyles[$selector][$prop] = $val;
+				}
 			}
-			return $parentNode;
+			return null;
+		} else {
+			$mobileStylesStr = array_reduce(
+					array_entries($globalMobileStyles),
+					fn($a, $selector_styles) => $a . "$selector_styles[0]{" .
+						implode(';', array_map(
+							fn($prop_val) => "$prop_val[0]:$prop_val[1]",
+							array_entries($selector_styles[1])
+						)) .
+						"}",
+					''
+				) . Stylesheetz::getMobileStylesStr();
+			return "@media only screen and ( max-width: 648px ) {{$mobileStylesStr}}";
 		}
-		return null;
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace DOM;
 
-class SelfClosing extends DOM
+class SelfClosingNode extends DOM
 {
 	public function __construct(string $tagName, ?array $attrs = [])
 	{

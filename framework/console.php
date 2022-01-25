@@ -30,3 +30,8 @@ function json_out($data, bool $debug = true, int $shifts = 0)
 	echo json_encode($output);
 	exit;
 }
+
+function dd($data)
+{
+	var_dump($data); die;
+}

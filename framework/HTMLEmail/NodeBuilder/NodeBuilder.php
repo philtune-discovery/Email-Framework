@@ -1,49 +1,38 @@
 <?php
 
-namespace HTMLEmail;
+namespace HTMLEmail\NodeBuilder;
 
 use DOM\DOM;
 use DOM\ElemNode;
 use DOM\NodeCollection;
 use DOM\TextNode;
+use HTMLEmail\HTMLEmail;
 
-class HTMLEmailNode
+class NodeBuilder
 {
 
-	use HasStylesheet;
+	public NodeCollection $domCollection;
+	private HTMLEmail $HTMLEmail;
 
-	private array $yield_stack = [];
-	private NodeCollection $nodeCollection;
+	public function __construct(HTMLEmail $HTMLEmail)
+	{
+		$this->domCollection = NodeCollection::create();
+		$this->HTMLEmail = $HTMLEmail;
+	}
 
 	public function __toString():string
 	{
-		return $this->nodeCollection;
+		return $this->HTMLEmail;
 	}
 
-	public static function create():self
+	public function yield(string $name = 'main'):DOM
 	{
-		$_instance = new static;
-		$_instance->nodeCollection = NodeCollection::create();
-		return $_instance;
+		return $this->domCollection;
 	}
 
-	public static function use(string $parentPath):self
+	public function addDiv(DOM $child):self
 	{
-		$_instance = new self();
-		$_instance->nodeCollection = DOM::inherit($parentPath);
-		return $_instance;
-	}
-
-	public static function createDiv():ElemNode
-	{
-		return ElemNode::create('tr')->addChild(
-			ElemNode::create('td')
-		);
-	}
-
-	public function div(DOM $child):self
-	{
-		$this->nodeCollection->addChild(
+		$this->domCollection->addChild(
 			ElemNode::create('tr')->addChild(
 				ElemNode::create('td')->addChild($child)
 			)
@@ -51,9 +40,9 @@ class HTMLEmailNode
 		return $this;
 	}
 
-	public function row($height):ElemNode
+	public function addRow($height):self
 	{
-		return ElemNode::create('tr')->addChild(
+		$this->domCollection->addChild(ElemNode::create('tr')->addChild(
 			ElemNode::create('td', [
 				'height' => $height,
 				'style'  => 'font-size:0px'
@@ -62,18 +51,19 @@ class HTMLEmailNode
 			        ->addChild(
 				        TextNode::create('&nbsp;')
 			        )
-		);
+		));
+		return $this;
 	}
 
-	public function full_width_img($src, string $alt = null, string $href = null):HTMLEmailNode
+	public function addFullWidthImage($src, string $alt = null, string $href = null):self
 	{
 		if ( is_array($src) ) {
 			$src = $src['src'];
 			$alt = $src['alt'] ?? null;
 			$href = $src['href'] ?? null;
 		}
-		return $this->div(
-			img([
+		return $this->addDiv(
+			HTMLEmail::img([
 				'src'   => $src,
 				'alt'   => $alt,
 				'href'  => $href,
@@ -88,9 +78,9 @@ class HTMLEmailNode
 	 * @param DOM[]|array $children_
 	 * @return $this
 	 */
-	public function cols(...$children_):self
+	public function addColumns(...$children_):self
 	{
-		$this->nodeCollection->addChildren([
+		$this->domCollection->addChildren([
 			ElemNode::create('tr')->addChild(
 				ElemNode::create('td')->addChild(
 					HTMLEmail::table()->addChild(
@@ -114,16 +104,18 @@ class HTMLEmailNode
 	/**
 	 * @param string[] $track
 	 */
-	public function track(array $track)
+	public function addTrackingPixels(array $track):self
 	{
 		$imgs = array_reduce($track, function ($imgs, $src) {
 			$imgs[] = img($src);
 			return $imgs;
 		}, []);
-		$this->nodeCollection->addChild(
+		$this->domCollection->addChild(
 			ElemNode::create('tr')->addChild(
 				ElemNode::create('td')->addChildren($imgs)
 			)
 		);
+		return $this;
 	}
+
 }

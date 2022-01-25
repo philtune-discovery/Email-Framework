@@ -2,16 +2,62 @@
 
 use DOM\DOM;
 use DOM\ElemNode;
-use DOM\NodeCollection;
-use DOM\SelfClosing;
+use DOM\SelfClosingNode;
 use DOM\TextNode;
 use HTMLEmail\HTMLEmail;
-use HTMLEmail\HTMLEmailNode;
 
-function email(array $config = []):HTMLEmailNode
-{
-	return HTMLEmail::email($config);
+if ( !function_exists('email') ) {
+	function email()
+	{
+
+	}
 }
+
+function getTableAttrs(array $mergeAttrs = [], array $mergeStyles = []):array
+{
+	return array_merge([
+		'width'       => '100%',
+		'cellpadding' => 0,
+		'cellspacing' => 0,
+		'border'      => 0,
+		'role'        => 'presentation',
+		'style'       => toStyleStr([
+			'max-width'       => '100%',
+			'mso-cellspacing' => '0px',
+			'mso-padding-alt' => '0px 0px 0px 0px'
+		], $mergeStyles),
+	], $mergeAttrs);
+}
+
+function toStyleStr(array $arr, ...$other_arrs):string
+{
+	$arr = array_merge($arr, ...$other_arrs);
+	return implode_kvps(';', $arr, fn($a, $b) => "$a:$b");
+}
+
+function toAttrStr(array $attrs, ...$other_attrs):string
+{
+	$attrs = array_merge($attrs, ...$other_attrs);
+	return implode_kvps(' ', $attrs, fn($a, $b) => "$a=\"$b\"");
+}
+
+function getTableAttrStr(array $mergeAttrs = [], array $mergeStyles = []):string
+{
+	return toAttrStr(getTableAttrs($mergeAttrs, $mergeStyles));
+}
+
+/**
+ * @param string|numeric $input
+ * @return string
+ */
+function toPx($input):string
+{
+	if ( is_string($input) && ( strtolower(substr($input, -2)) === 'px' || substr($input, -1) === '%' ) ) {
+		return $input;
+	}
+	return "{$input}px";
+}
+
 
 function col($attrs, ...$children_):ElemNode
 {
@@ -28,7 +74,7 @@ function row($height):ElemNode
  * @param string|array|null $alt <p>img 'alt' OR array of attributes</p>
  * @param string|null $href
  * @param array $attrs
- * @return SelfClosing|ElemNode
+ * @return SelfClosingNode|ElemNode
  */
 function img($src, $alt = null, string $href = null, array $attrs = [])
 {
@@ -87,16 +133,6 @@ function table(array $mergeAttrs = [], array $mergeStyles = []):ElemNode
 	return HTMLEmail::table($mergeAttrs, $mergeStyles);
 }
 
-function getTableAttrStr(array $mergeAttrs = [], array $mergeStyles = []):string
-{
-	return HTMLEmail::getTableAttrStr($mergeAttrs, $mergeStyles);
-}
-
-function toStyleStr(array $arr, ...$other_arrs):string
-{
-	return HTMLEmail::toStyleStr($arr, ...$other_arrs);
-}
-
 function padded(array $padding, array $children_)
 {
 	return HTMLEmail::padded($padding, $children_);
@@ -105,9 +141,4 @@ function padded(array $padding, array $children_)
 function a(string $text, string $href, array $attrs = []):ElemNode
 {
 	return HTMLEmail::a($text, $href, $attrs);
-}
-
-function email_root(ElemNode $_body):NodeCollection
-{
-	return HTMLEmail::getRoot($_body);
 }

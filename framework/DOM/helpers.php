@@ -3,12 +3,12 @@
 use DOM\DOM;
 use DOM\ElemNode;
 use DOM\ConditionalComment;
-use DOM\SelfClosing;
+use DOM\SelfClosingNode;
 use DOM\TextNode;
 
-function selfClosing(string $tagName, ?array $attrs = []):SelfClosing
+function selfClosing(string $tagName, ?array $attrs = []):SelfClosingNode
 {
-	return SelfClosing::create($tagName, $attrs);
+	return SelfClosingNode::create($tagName, $attrs);
 }
 
 function text(string $text):TextNode

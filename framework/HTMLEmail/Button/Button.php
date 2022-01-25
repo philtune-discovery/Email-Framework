@@ -1,11 +1,10 @@
 <?php
 
-namespace HTMLEmail;
+namespace HTMLEmail\Button;
 
 use DOM\ConditionalComment;
 use DOM\DOM;
 use DOM\ElemNode;
-use Styles\Styles;
 
 class Button
 {
@@ -46,7 +45,7 @@ class Button
 
 	public function setTextStyles(array $textStyles):self
 	{
-//		$textStyles['color'] = self::toRgba($textStyles['color']);
+		//		$textStyles['color'] = self::toRgba($textStyles['color']);
 		$this->textStyles = $textStyles;
 		return $this;
 	}
@@ -97,8 +96,8 @@ class Button
 		}
 
 		$rect->attrs([
-			'href'    => $this->href,
-			'style'   => toStyleStr([
+			'href'  => $this->href,
+			'style' => toStyleStr([
 				'height'        => $this->toUnit('height'),
 				'v-text-anchor' => 'middle',
 				'width'         => $this->toUnit('width'),

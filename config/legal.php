@@ -1,13 +1,14 @@
 <?php
 
 use DOM\NodeCollection;
+use HTMLEmail\HTMLEmail;
 
 $a = fn(string $text, string $href, array $styles = []) => a($text, $href, [
-	'style'  => toStyleStr([
+	'style' => toStyleStr([
 		'color'           => 'blue',
 		'text-decoration' => 'none',
 	], $styles),
-	'class'  => 'hvr-td-u',
+	'class' => 'hvr-td-u',
 ]);
 
 return NodeCollection::create()->addChild(
@@ -36,16 +37,16 @@ return NodeCollection::create()->addChild(
 					],
 				])) . "<br/>This email was sent to {$a('{{ user.email }}', 'mailto:{{ user.email }}', ['color' => '#444444'])}.",
 				"Copyright &copy; {{ \"now\" | date: \"%Y\" }}&nbsp;Discovery&nbsp;Communications,&nbsp;LLC<br/>8403 Colesville Road | Silver Spring, MD 20910 | All Rights Reserved"
-			],[
-				'align' => 'center',
-				'style' => toStyleStr([
-					'font-family' => "'Helvetica Neue',Helvetica,Arial,sans-serif",
-					'font-size'   => '11px',
-					'line-height' => '12px',
-					'color'       => '#555',
-				]),
-				'class' => 'm_legal-text',
-			],
+			], [
+			'align' => 'center',
+			'style' => toStyleStr([
+				'font-family' => "'Helvetica Neue',Helvetica,Arial,sans-serif",
+				'font-size'   => '11px',
+				'line-height' => '12px',
+				'color'       => '#555',
+			]),
+			'class' => 'm_legal-text',
+		],
 			15
 		)
 	)

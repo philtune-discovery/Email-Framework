@@ -2,25 +2,46 @@
 
 namespace HTMLEmail;
 
-use App\App;
-use DOM\DOM;
+use HTMLEmail\NodeBuilder\NodeBuilder;
 
 class HTMLEmail
 {
 
+	use Renderable;
 	use hasHelpers;
-	use hasRoot;
 
-	public static function include(string $path)
+	protected string $title;
+	private Container $container;
+	private string $bgcolor;
+	private string $txtcolor;
+	private ?string $previewText;
+	public NodeBuilder $nodeBuilder;
+
+	public function __construct(array $config = [])
 	{
-		// include file that returns an HTMLEmail
-		// this will register the parent
-		App::config($path);
-		return DOM::getGlobal()['parent'];
+		$this->title = $config['title'] ?? 'Email';
+		$this->bgcolor = $config['bgcolor'] ?? '#FFFFFF';
+		$this->txtcolor = $config['txtcolor'] ?? '#000000';
+		$this->previewText($config['preview-text'] ?? null);
+		$this->container = new Container($this, $config['container']);
+		$this->nodeBuilder = new NodeBuilder($this);
 	}
 
-	public static function inherit(string $parentPath):HTMLEmailNode
+	public static function new(array $config = []):NodeBuilder
 	{
-		return HTMLEmailNode::use($parentPath);
+		$_htmlEmail = new static($config);
+		return $_htmlEmail->nodeBuilder;
 	}
+
+	public function __toString():string
+	{
+		return $this->render();
+	}
+
+	public function previewText(string $previewText):self
+	{
+		$this->previewText = $previewText;
+		return $this;
+	}
+
 }
