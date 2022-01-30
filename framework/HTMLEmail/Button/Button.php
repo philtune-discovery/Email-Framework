@@ -5,6 +5,7 @@ namespace HTMLEmail\Button;
 use NodeBuilder\ConditionalComment;
 use NodeBuilder\NodeBuilder;
 use NodeBuilder\ElemNode;
+use function HTMLEmail\toStyleStr;
 
 class Button
 {

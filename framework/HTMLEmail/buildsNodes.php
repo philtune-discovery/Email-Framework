@@ -25,14 +25,14 @@ trait buildsNodes
 	 * @param NodeBuilder[] $children_
 	 * @return NodeBuilder|NodeCollection
 	 */
-	public static function padded(array $padding, array $children_)
+	public static function buildPadded(array $padding, array $children_):NodeCollection
 	{
 		$top_padding = $padding[0] ?? null;
 		$right_padding = $padding[1] ?? $top_padding;
 		$bottom_padding = $padding[2] ?? $top_padding;
 		$left_padding = $padding[3] ?? $right_padding;
 		return NodeCollection::new()->addChildren([
-			static::buildRow($top_padding),
+			self::buildRowPadding($top_padding),
 			ElemNode::new('tr')->addChild(
 				ElemNode::new('td')->addChild(
 					ElemNode::new('table')->attrs([
@@ -47,8 +47,8 @@ trait buildsNodes
 						]),
 					])->addChild(
 						ElemNode::new('tr')->addChildren([
-							static::buildColumn($left_padding),
-							static::buildColumn([])->addChild(
+							self::buildColumn($left_padding),
+							self::buildColumn([])->addChild(
 								ElemNode::new('table')->attrs([
 									'width'       => "100%",
 									'cellpadding' => "0",
@@ -61,16 +61,16 @@ trait buildsNodes
 									]),
 								])->addChildren($children_)
 							),
-							static::buildColumn($right_padding),
+							self::buildColumn($right_padding),
 						])
 					)
 				)
 			),
-			static::buildRow($bottom_padding)
+			self::buildRowPadding($bottom_padding)
 		]);
 	}
 
-	public static function table(array $mergeAttrs = [], array $mergeStyles = []):ElemNode
+	public static function buildTable(array $mergeAttrs = [], array $mergeStyles = []):ElemNode
 	{
 		return ElemNode::new('table')->attrs(getTableAttrs($mergeAttrs, $mergeStyles));
 	}
@@ -79,7 +79,7 @@ trait buildsNodes
 	 * @param string|numeric $height
 	 * @return ElemNode
 	 */
-	public static function buildRow($height):ElemNode
+	public static function buildRowPadding($height):ElemNode
 	{
 		return ElemNode::new('tr')->addChild(
 			ElemNode::new('td')->attrs([
@@ -97,9 +97,9 @@ trait buildsNodes
 	 * @param NodeBuilder[] $children_
 	 * @return NodeBuilder
 	 */
-	public static function rows(...$children_):NodeBuilder
+	public static function buildRows(...$children_):NodeBuilder
 	{
-		return self::table()->addChildren($children_);
+		return self::buildTable()->addChildren($children_);
 	}
 
 	/**
@@ -153,7 +153,7 @@ trait buildsNodes
 		$result = [];
 		foreach ( $paragraphs as $i => $paragraph ) {
 			if ( $i !== 0 ) {
-				$result[] = row($margin_height);
+				$result[] = row_padding($margin_height);
 			}
 			$result[] = self::buildTextRow($paragraph, $paragraph_attrs);
 		}
@@ -162,7 +162,7 @@ trait buildsNodes
 
 	public static function buildButton(string $text, string $href, array $buttonStyles, array $textStyles = []):ElemNode
 	{
-		return static::buildTextRow(
+		return self::buildTextRow(
 			Button::create()
 			      ->text($text)
 			      ->href($href)
@@ -209,5 +209,12 @@ trait buildsNodes
 		return $href ?
 			ElemNode::new('a')->attrs(['href' => $href, 'target' => '_blank'])->addChild($imgNode) :
 			$imgNode;
+	}
+
+	public static function row(NodeBuilder $child):ElemNode
+	{
+		return ElemNode::new('tr')->addChild(
+			ElemNode::new('td')->addChild($child)
+		);
 	}
 }

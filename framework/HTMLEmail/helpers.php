@@ -1,10 +1,10 @@
 <?php
 
-use NodeBuilder\NodeBuilder;
+namespace HTMLEmail;
+
 use NodeBuilder\ElemNode;
+use NodeBuilder\NodeBuilder;
 use NodeBuilder\SelfClosingNode;
-use NodeBuilder\TextNode;
-use HTMLEmail\HTMLEmail;
 
 function getTableAttrs(array $mergeAttrs = [], array $mergeStyles = []):array
 {
@@ -56,9 +56,9 @@ function col($attrs, ...$children_):ElemNode
  * @param string|numeric $height
  * @return ElemNode
  */
-function row($height):ElemNode
+function row_padding($height):ElemNode
 {
-	return HTMLEmail::buildRow($height);
+	return HTMLEmail::buildRowPadding($height);
 }
 
 /**
@@ -79,7 +79,7 @@ function img($src, $alt = null, string $href = null, array $attrs = [])
  */
 function rows(...$children_):NodeBuilder
 {
-	return HTMLEmail::rows(...$children_);
+	return HTMLEmail::buildRows(...$children_);
 }
 
 /**
@@ -87,7 +87,7 @@ function rows(...$children_):NodeBuilder
  * @param array $attrs
  * @return ElemNode
  */
-function textRow($string_or_node, array $attrs = []):ElemNode
+function text_row($string_or_node, array $attrs = []):ElemNode
 {
 	return HTMLEmail::buildTextRow($string_or_node, $attrs);
 }
@@ -95,7 +95,7 @@ function textRow($string_or_node, array $attrs = []):ElemNode
 /**
  * @param array $paragraphs
  * @param array $paragraph_attrs
- * @param int $margin_height
+ * @param string|numeric $margin_height
  * @return ElemNode[]
  */
 function text_rows(array $paragraphs, array $paragraph_attrs = [], $margin_height = 0):array
@@ -108,14 +108,9 @@ function button(string $text, string $href, array $buttonStyles, array $textStyl
 	return HTMLEmail::buildButton($text, $href, $buttonStyles, $textStyles);
 }
 
-function table(array $mergeAttrs = [], array $mergeStyles = []):ElemNode
-{
-	return HTMLEmail::table($mergeAttrs, $mergeStyles);
-}
-
 function padded(array $padding, array $children_)
 {
-	return HTMLEmail::padded($padding, $children_);
+	return HTMLEmail::buildPadded($padding, $children_);
 }
 
 function a(string $text, string $href):ElemNode

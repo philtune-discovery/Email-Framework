@@ -22,7 +22,7 @@ class Stylesheet
 			ElemNode::new('style')->attrs(['type' => 'text/css'])->addChildren([
 				TextNode::new(include_string('./sass/head_styles.css')),
 				TextNode::new(Stylesheetz::getPseudoStylesStr()),
-				TextNode::new(HTMLEmail::renderMobileStyles()),
+				TextNode::new("@media only screen and ( max-width: 648px ) {" . Stylesheetz::getMobileStylesStr() . "}"),
 				TextNode::new("* { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif }")
 			]),
 			ConditionalComment::new('mso')->addChildren([

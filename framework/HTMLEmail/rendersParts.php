@@ -8,8 +8,13 @@ use NodeBuilder\ElemNode;
 use NodeBuilder\TextNode;
 use Styles\Stylesheet;
 
-trait canRender
+trait rendersParts
 {
+
+	public function __toString():string
+	{
+		return $this->render();
+	}
 
 	protected function render():string
 	{
@@ -78,7 +83,7 @@ trait canRender
 						'bgcolor' => $this->bgcolor,
 						'align'   => 'center',
 						'valign'  => 'top'
-					])->addChildren($this->container->getChildren())
+					])->addChildren($this->container->get())
 				)
 			])
 		);

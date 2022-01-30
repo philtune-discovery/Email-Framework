@@ -1,10 +1,17 @@
 <?php
 
-namespace HTMLEmail;
+namespace HTMLEmail\Container;
 
-use NodeBuilder\NodeBuilder;
+use HTMLEmail\HTMLEmail;
 use NodeBuilder\ElemNode;
+use NodeBuilder\NodeBuilder;
 use NodeBuilder\TextNode;
+use function hex2rgba;
+use function HTMLEmail\getTableAttrs;
+use function HTMLEmail\row_padding;
+use function HTMLEmail\toAttrStr;
+use function HTMLEmail\toPx;
+use function HTMLEmail\toStyleStr;
 
 class Container
 {
@@ -37,21 +44,21 @@ class Container
 	/**
 	 * @return NodeBuilder[]
 	 */
-	public function getChildren():array
+	public function get():array
 	{
 		$_inner = [
 			TextNode::new('<!-- Container -->'),
-			table([
+			HTMLEmail::buildTable([
 				'width' => $this->width,
 				'class' => $this->class,
 			])->addChild(
-				$this->htmlEmail->nodeBuilder->domCollection
+				$this->htmlEmail->domCollection
 			),
 			TextNode::new('<!-- End Container -->')
 		];
 		return $this->use ?
 			[
-				table(['width' => $this->width, 'class' => $this->class])->addChildren([
+				HTMLEmail::buildTable(['width' => $this->width, 'class' => $this->class])->addChildren([
 					ElemNode::new('tr')->addChild(
 						ElemNode::new('td')->attrs([
 							'bgcolor' => $this->bgColor,
@@ -69,7 +76,7 @@ class Container
 						])
 					),
 					TextNode::new('<!-- BOTTOM SPACER FIX -->'),
-					row(64)
+					row_padding(64)
 				])
 			] :
 			$_inner;

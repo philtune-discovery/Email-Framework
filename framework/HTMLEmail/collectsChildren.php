@@ -1,13 +1,13 @@
 <?php
 
-namespace HTMLEmail\HTMLEmailNodeBuilder;
+namespace HTMLEmail;
 
-use HTMLEmail\HTMLEmail;
 use NodeBuilder\ElemNode;
 use NodeBuilder\NodeBuilder;
 
-trait addsNodes
+trait collectsChildren
 {
+
 	/**
 	 * @param NodeBuilder[] $children_
 	 * @return $this
@@ -20,12 +20,7 @@ trait addsNodes
 
 	public function addRow(NodeBuilder $child):self
 	{
-		return $this->add(self::row($child));
-	}
-
-	public function addRowPadding($height):self
-	{
-		return $this->add(self::row_padding($height));
+		return $this->add(HTMLEmail::row($child));
 	}
 
 	public function addImgRow($src, string $alt = null, string $href = null):self
@@ -36,12 +31,12 @@ trait addsNodes
 			$href = $src['href'] ?? null;
 		}
 		return $this->add(
-			self::row(
+			HTMLEmail::row(
 				HTMLEmail::img([
 					'src'   => $src,
 					'alt'   => $alt,
 					'href'  => $href,
-					'width' => $this->htmlEmail->getContainer()->getWidth(),
+					'width' => $this->getContainer()->getWidth(),
 					'style' => "display:block",
 					'class' => 'w-100p',
 				])
@@ -66,7 +61,7 @@ trait addsNodes
 		return $this->add(
 			ElemNode::new('tr')->addChild(
 				ElemNode::new('td')->addChild(
-					HTMLEmail::table()->addChild(
+					HTMLEmail::buildTable()->addChild(
 						ElemNode::new('tr')->addChildren(
 							$children_
 						)
@@ -94,7 +89,9 @@ trait addsNodes
 
 	public function addPadded(array $padding, array $children_):self
 	{
-		$this->domCollection->addChild(HTMLEmail::padded($padding, $children_));
-		return $this;
+		return $this->add(
+			HTMLEmail::buildPadded($padding, $children_)
+		);
 	}
+
 }

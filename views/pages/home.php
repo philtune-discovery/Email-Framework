@@ -1,7 +1,12 @@
 <?php
 
+use function HTMLEmail\col;
+use function HTMLEmail\row_padding;
+use function HTMLEmail\rows;
+use function HTMLEmail\text_row;
+use function HTMLEmail\toStyleStr;
+
 echo myEmail('HTML Email Framework')
-	->add()
 	->addImgRow(
 		src('/img/header.png'),
 		"HGTV Dream Home Proud Sponsor 2022 | Cabinets To Go - Wow For Less.",
@@ -13,24 +18,22 @@ echo myEmail('HTML Email Framework')
 		'https://ad.doubleclick.net/ddm/trackclk/N636.3140998DISCOVERYCHANNEL/B26331212.312029041;dc_trk_aid=517031567;dc_trk_cid=163820815;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd='
 	)
 	->addColumns(
+		img_col('/img/cabinets.jpg', 314, ['valign' => 'top']),
 		col(
-			['width' => perc(314 / 639), 'valign' => 'top'],
-			img(src('/img/cabinets.jpg'), ['width' => "100%"])
-		),
-		col(
-			['width' => perc(299 / 639)],
+			['width' => comp_perc(299)],
 			rows(
-				textRow(
-					'DREAM IT. DO IT.',
+				text_row(
+					'Dream It. Do It.',
 					['style' => toStyleStr([
-						'font-family' => "'Helvetica Neue',Helvetica,Arial,sans-serif",
-						'font-weight' => 700,
-						'font-size'   => "32px",
-						'color'       => "#444244",
+						'font-family'    => "'Helvetica Neue',Helvetica,Arial,sans-serif",
+						'font-weight'    => 700,
+						'font-size'      => "32px",
+						'color'          => "#444244",
+						'text-transform' => 'uppercase',
 					])]
 				),
-				row(10),
-				textRow(
+				row_padding(10),
+				text_row(
 					"We're your one-stop destination for cabinets, closets, flooring, and more. We’ll help you turn your house into your dream home.",
 					['style' => toStyleStr([
 						'font-family' => "'Helvetica Neue',Helvetica,Arial,sans-serif",
@@ -41,15 +44,15 @@ echo myEmail('HTML Email Framework')
 						'color'       => "#666666",
 					])]
 				),
-				row(10),
+				row_padding(10),
 				myButton(
 					'Get A Free 3D Design',
 					'https://ad.doubleclick.net/ddm/trackclk/N636.3140998DISCOVERYCHANNEL/B26331212.312029041;dc_trk_aid=517031567;dc_trk_cid=163820815;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=',
-					294
+					comp_rel(299)
 				),
 			)
 		),
-		col(perc(26 / 639))
+		col(comp_perc(26))
 	)
 	->addImgRow(
 		src('/img/laundry.jpg'),
@@ -64,4 +67,4 @@ echo myEmail('HTML Email Framework')
 	->addTrackingPixels([
 		'https://ad.doubleclick.net/ddm/trackimp/N636.3140998DISCOVERYCHANNEL/B26331212.312029041;dc_trk_aid=517031567;dc_trk_cid=163820815;ord=[timestamp];dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;gdpr=${GDPR};gdpr_consent=${GDPR_CONSENT_755};ltd=?',
 	])
-	->addPadded([32], myLegal());
+	->add(myLegal());

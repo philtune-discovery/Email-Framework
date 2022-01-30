@@ -2,23 +2,24 @@
 
 namespace HTMLEmail;
 
+use HTMLEmail\Container\Container;
 use HTMLEmail\EmailAttributeBuilder\EmailAttributeBuilder;
-use HTMLEmail\HTMLEmailNodeBuilder\HTMLEmailNodeBuilder;
 use NodeBuilder\NodeBuilder;
+use NodeBuilder\NodeCollection;
 
 class HTMLEmail
 {
 
-	use canRender;
 	use buildsNodes;
-	use hasUtilities;
+	use collectsChildren;
+	use rendersParts;
 
 	protected string $title;
 	protected Container $container;
 	private string $bgcolor;
 	private string $txtcolor;
 	private ?string $previewText;
-	public HTMLEmailNodeBuilder $nodeBuilder;
+	public NodeCollection $domCollection;
 
 	private function __construct(array $config = [])
 	{
@@ -27,30 +28,24 @@ class HTMLEmail
 		$this->txtcolor = $config['txtcolor'] ?? '#000000';
 		$this->previewText($config['preview-text'] ?? null);
 		$this->container = new Container($this, $config['container']);
-		$this->nodeBuilder = new HTMLEmailNodeBuilder($this);
 		NodeBuilder::setAttributeBuilderClass(EmailAttributeBuilder::class);
-	}
-
-	public function getContainer():Container
-	{
-		return $this->container;
-	}
-
-	public static function new(array $config = []):HTMLEmailNodeBuilder
-	{
-		$_htmlEmail = new static($config);
-		return $_htmlEmail->nodeBuilder;
-	}
-
-	public function __toString():string
-	{
-		return $this->render();
+		$this->domCollection = NodeCollection::new();
 	}
 
 	public function previewText(string $previewText):self
 	{
 		$this->previewText = $previewText;
 		return $this;
+	}
+
+	public static function new(array $config = []):self
+	{
+		return new static($config);
+	}
+
+	public function getContainer():Container
+	{
+		return $this->container;
 	}
 
 }
