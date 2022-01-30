@@ -1,17 +1,10 @@
 <?php
 
-use DOM\DOM;
-use DOM\ElemNode;
-use DOM\SelfClosingNode;
-use DOM\TextNode;
+use NodeBuilder\NodeBuilder;
+use NodeBuilder\ElemNode;
+use NodeBuilder\SelfClosingNode;
+use NodeBuilder\TextNode;
 use HTMLEmail\HTMLEmail;
-
-if ( !function_exists('email') ) {
-	function email()
-	{
-
-	}
-}
 
 function getTableAttrs(array $mergeAttrs = [], array $mergeStyles = []):array
 {
@@ -41,11 +34,6 @@ function toAttrStr(array $attrs, ...$other_attrs):string
 	return implode_kvps(' ', $attrs, fn($a, $b) => "$a=\"$b\"");
 }
 
-function getTableAttrStr(array $mergeAttrs = [], array $mergeStyles = []):string
-{
-	return toAttrStr(getTableAttrs($mergeAttrs, $mergeStyles));
-}
-
 /**
  * @param string|numeric $input
  * @return string
@@ -61,12 +49,16 @@ function toPx($input):string
 
 function col($attrs, ...$children_):ElemNode
 {
-	return HTMLEmail::col($attrs, ...$children_);
+	return HTMLEmail::buildColumn($attrs, ...$children_);
 }
 
+/**
+ * @param string|numeric $height
+ * @return ElemNode
+ */
 function row($height):ElemNode
 {
-	return HTMLEmail::row($height);
+	return HTMLEmail::buildRow($height);
 }
 
 /**
@@ -82,50 +74,38 @@ function img($src, $alt = null, string $href = null, array $attrs = [])
 }
 
 /**
- * @param DOM[] $children_
- * @return DOM
+ * @param NodeBuilder[] $children_
+ * @return NodeBuilder
  */
-function rows(...$children_):DOM
+function rows(...$children_):NodeBuilder
 {
 	return HTMLEmail::rows(...$children_);
 }
 
 /**
- * @param string|DOM $string_or_node
+ * @param string|NodeBuilder $string_or_node
  * @param array $attrs
  * @return ElemNode
  */
-function p($string_or_node, array $attrs = []):ElemNode
+function textRow($string_or_node, array $attrs = []):ElemNode
 {
-	return HTMLEmail::p($string_or_node, $attrs);
+	return HTMLEmail::buildTextRow($string_or_node, $attrs);
 }
-
-function paragraphs(array $paragraphs, array $paragraph_attrs = [], $margin_height = 0):array
-{
-	return HTMLEmail::paragraphs($paragraphs, $paragraph_attrs, $margin_height);
-}
-
-;
 
 /**
- * @param TextNode[] $textNodes
- * @return DOM
+ * @param array $paragraphs
+ * @param array $paragraph_attrs
+ * @param int $margin_height
+ * @return ElemNode[]
  */
-function stylesheet(...$textNodes):DOM
+function text_rows(array $paragraphs, array $paragraph_attrs = [], $margin_height = 0):array
 {
-	return ElemNode::create('style', [
-		'type' => 'text/css'
-	])->addChildren($textNodes);
+	return HTMLEmail::buildTextRows($paragraphs, $paragraph_attrs, $margin_height);
 }
 
-function button(string $text, string $href, array $buttonStyles, array $textStyles = []):DOM
+function button(string $text, string $href, array $buttonStyles, array $textStyles = []):NodeBuilder
 {
-	return HTMLEmail::button($text, $href, $buttonStyles, $textStyles);
-}
-
-function body():ElemNode
-{
-	return HTMLEmail::body();
+	return HTMLEmail::buildButton($text, $href, $buttonStyles, $textStyles);
 }
 
 function table(array $mergeAttrs = [], array $mergeStyles = []):ElemNode
@@ -138,7 +118,7 @@ function padded(array $padding, array $children_)
 	return HTMLEmail::padded($padding, $children_);
 }
 
-function a(string $text, string $href, array $attrs = []):ElemNode
+function a(string $text, string $href):ElemNode
 {
-	return HTMLEmail::a($text, $href, $attrs);
+	return HTMLEmail::a($text, $href);
 }

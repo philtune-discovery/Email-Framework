@@ -2,7 +2,6 @@
 
 include 'App/helpers.php';
 include 'View/helpers.php';
-include 'DOM/helpers.php';
 include 'HTMLEmail/helpers.php';
 
 function perc($int):string

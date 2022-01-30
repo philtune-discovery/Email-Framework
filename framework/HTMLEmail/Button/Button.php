@@ -2,9 +2,9 @@
 
 namespace HTMLEmail\Button;
 
-use DOM\ConditionalComment;
-use DOM\DOM;
-use DOM\ElemNode;
+use NodeBuilder\ConditionalComment;
+use NodeBuilder\NodeBuilder;
+use NodeBuilder\ElemNode;
 
 class Button
 {
@@ -83,16 +83,17 @@ class Button
 		);
 	}
 
-	public function toDOM():DOM
+	public function toDOM():NodeBuilder
 	{
-		$_center = ElemNode::create('center');
+		$_center = ElemNode::new('center');
 
 		if ( $border_radius = $this->toUnit('border-radius') ) {
 			$this->aStyles['border-radius'] = $border_radius;
-			$rect = ElemNode::create('v:roundrect')
-			                ->attr('arcsize', round(floatval($this->buttonStyle('border-radius')) / floatval($this->buttonStyle('height')) * 100) . '%');
+			$arcsize = round(floatval($this->buttonStyle('border-radius')) / floatval($this->buttonStyle('height')) * 100) . '%';
+			$rect = ElemNode::new('v:roundrect')
+			                ->attrs(compact('arcsize'));
 		} else {
-			$rect = ElemNode::create('v:rect');
+			$rect = ElemNode::new('v:rect');
 		}
 
 		$rect->attrs([
@@ -112,37 +113,37 @@ class Button
 				'color' => $this->buttonStyle('background-color'),
 			]);
 		} else {
-			$rect->attr('fillcolor', $this->buttonStyle('background-color'));
+			$rect->attrs(['fillcolor' => $this->buttonStyle('background-color')]);
 		}
 
 		$rect
 			->addSelfClosing('w:anchorlock')
 			->addChild($_center);
 
-		$_a = ElemNode::create('a')->attr('href', $this->href)->addText($this->text);
+		$_a = ElemNode::new('a')->attrs(['href' => $this->href])->addText($this->text);
 		$_clone_a = clone $_a;
 		if ( !( $this->buttonStyle('border-color') && $this->buttonStyle('background-image') ) ) {
 			$_center->addChild($_clone_a);
-			$_outer = ConditionalComment::create('!mso')->addChild($_a);
+			$_outer = ConditionalComment::new('!mso')->addChild($_a);
 		} else {
 			$this->aStyles['mso-hide'] = 'all';
-			$_center->attr('style', toStyleStr($this->textStyles));
+			$_center->attrs(['style' => toStyleStr($this->textStyles)]);
 			$_outer =& $_a;
 		}
 
 		$a_styles = $this->getAStyles();
 
-		$_a->attr('style', toStyleStr($a_styles));
-		$_clone_a->attr('style', toStyleStr($a_styles));
+		$_a->attrs(['style' => toStyleStr($a_styles)]);
+		$_clone_a->attrs(['style' => toStyleStr($a_styles)]);
 
 		if ( $border_color = $this->buttonStyle('border-color') ) {
-			$rect->attr('strokecolor', $border_color);
+			$rect->attrs(['strokecolor' => $border_color]);
 		} else {
-			$rect->attr('stroke', 'f');
+			$rect->attrs(['stroke' => 'f']);
 		}
 
-		return ElemNode::create('div')->addChildren([
-			ConditionalComment::create('mso')->addChild($rect),
+		return ElemNode::new('div')->addChildren([
+			ConditionalComment::new('mso')->addChild($rect),
 			$_outer
 		]);
 	}

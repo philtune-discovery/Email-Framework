@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Stylesheetz extends Singleton
+class Stylesheetz
 {
 	private const INLINE_STYLES_FILE = './sass/inline_styles.css';
 	private const MOBILE_WRAPPER_PATTERN = '/@media \(max-width: \d+px\){(.+?})}/';
@@ -57,46 +57,52 @@ class Stylesheetz extends Singleton
 			$this->desktop_styles_arr = $desktop_arr;
 
 		}
-		parent::__construct();
 	}
 
-	public static function getInlineStylesStr()
+	protected function __clone()
 	{
-		return self::getInstance()->inline_styles_str;
+	}
+
+	protected function __wakeup()
+	{
+	}
+
+	public static function instance():self
+	{
+		static $_this = null;
+		if ( $_this === null ) {
+			$_this = new static;
+		}
+		return $_this;
 	}
 
 	public static function getMobileStylesStr()
 	{
-		return self::getInstance()->mobile_styles_str;
+		return self::instance()->mobile_styles_str;
 	}
 
 	public static function getPseudoStylesStr()
 	{
-		return self::getInstance()->pseudo_styles_str;
-	}
-
-	public static function getPseudoStylesKeys()
-	{
-		return self::getInstance()->pseudo_styles_keys;
+		return self::instance()->pseudo_styles_str;
 	}
 
 	public static function hasPseudoStylesFor($name)
 	{
-		return in_array($name, self::getInstance()->pseudo_styles_keys);
+		return in_array($name, self::instance()->pseudo_styles_keys);
 	}
 
 	public static function hasMobileStylesFor($name)
 	{
-		return in_array($name, self::getInstance()->mobile_styles_keys);
+		return in_array($name, self::instance()->mobile_styles_keys);
 	}
 
 	public static function getDesktopStylesArr()
 	{
-		return self::getInstance()->desktop_styles_arr;
+		return self::instance()->desktop_styles_arr;
 	}
 
 	public static function getInlineStylesFor($name)
 	{
-		return self::getInstance()->desktop_styles_arr[$name] ?? '';
+		return self::instance()->desktop_styles_arr[$name] ?? '';
 	}
 }

@@ -2,7 +2,9 @@
 
 namespace HTMLEmail;
 
-use DOM\DOM;
+use NodeBuilder\NodeBuilder;
+use NodeBuilder\ElemNode;
+use NodeBuilder\TextNode;
 
 class Container
 {
@@ -27,38 +29,46 @@ class Container
 		$this->border = $config['border'] ?? 'none';
 	}
 
+	public function getWidth()
+	{
+		return $this->width;
+	}
+
 	/**
-	 * @return DOM[]
+	 * @return NodeBuilder[]
 	 */
 	public function getChildren():array
 	{
 		$_inner = [
-			text('<!-- Container -->'),
-			table(['width' => $this->width, 'class' => $this->class])
-				->addChild($this->htmlEmail->nodeBuilder->domCollection)
-				->addChild(config('legal')),
-			text('<!-- End Container -->')
+			TextNode::new('<!-- Container -->'),
+			table([
+				'width' => $this->width,
+				'class' => $this->class,
+			])->addChild(
+				$this->htmlEmail->nodeBuilder->domCollection
+			),
+			TextNode::new('<!-- End Container -->')
 		];
 		return $this->use ?
 			[
 				table(['width' => $this->width, 'class' => $this->class])->addChildren([
-					elem('tr')->addChild(
-						elem('td', [
+					ElemNode::new('tr')->addChild(
+						ElemNode::new('td')->attrs([
 							'bgcolor' => $this->bgColor,
 							'style'   => 'background-color:' . hex2rgba($this->bgColor)
 						])->addChildren([
-							text($this->getIEWrapper(fn(string $html):string => "<!--[if mso | IE]>$html<![endif]-->")),
-							elem('div', [
+							TextNode::new($this->getIEWrapper(fn(string $html):string => "<!--[if mso | IE]>$html<![endif]-->")),
+							ElemNode::new('div')->attrs([
 								'style' => toStyleStr([
 									'max-width' => toPx($this->width),
 									'margin'    => '0px auto',
 									'border'    => $this->border,
 								])
 							])->addChildren($_inner),
-							text("<!--[if mso | IE]></td></tr></table><![endif]-->")
+							TextNode::new("<!--[if mso | IE]></td></tr></table><![endif]-->")
 						])
 					),
-					text('<!-- BOTTOM SPACER FIX -->'),
+					TextNode::new('<!-- BOTTOM SPACER FIX -->'),
 					row(64)
 				])
 			] :
@@ -67,7 +77,7 @@ class Container
 
 	private function getIEWrapper(callable $cb):string
 	{
-		$table_attr_str = getTableAttrStr(['align' => 'center']);
+		$table_attr_str = toAttrStr(getTableAttrs(['align' => 'center']));
 		$td_attr_str = 'style="' . toStyleStr([
 				'line-height'          => '0px',
 				'font-size'            => '0px',

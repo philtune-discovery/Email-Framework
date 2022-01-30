@@ -2,7 +2,7 @@
 @import 'head/reset';
 
 .font-family {
-	font-family: $ff-sans;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 @include desktop {

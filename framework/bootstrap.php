@@ -1,15 +1,14 @@
 <?php
 
 use App\App;
-use DOM\DOM;
+use NodeBuilder\NodeBuilder;
 
-include 'console.php';
-include 'autoloader.php';
-include 'helpers.php';
+include __DIR__ . '/console.php';
+include __DIR__ . '/autoloader.php';
+include __DIR__ . '/helpers.php';
+include __DIR__ . '/definitions.php';
 
-include 'definitions.php';
-
-include 'functions.php';
+include __DIR__ . './../functions.php';
 
 App::setResourcePath(LOCAL_RESOURCE_PATH);
 App::output(view('pages/home'));

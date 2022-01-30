@@ -1,19 +1,6 @@
 <?php
 
 use App\App;
-use App\Selector;
-
-function attrList($name, array $addlAttrs = []):array
-{
-	return ( new Selector($name, $addlAttrs) )
-		->getAttrsList();
-}
-
-function attrStr($name, array $addlAttrs = []):string
-{
-	return ( new Selector($name, $addlAttrs) )
-		->getAttrsStr();
-}
 
 function settings(array $settings):bool
 {

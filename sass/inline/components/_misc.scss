@@ -1,4 +1,4 @@
-.mobile-only-div {
+@mixin mobile-only-div {
 	display: none;
 	mso-hide: all;
 	overflow: hidden;
@@ -17,7 +17,7 @@
 	}
 }
 
-.mobile-only-tr {
+@mixin mobile-only-tr {
 	display: none;
 	mso-hide: all;
 	font-size: 0;
@@ -30,7 +30,7 @@
 	}
 }
 
-.mobile-only-td {
+@mixin mobile-only-td {
 	display: none;
 	mso-hide: all;
 	@include mobile {
@@ -39,16 +39,10 @@
 	}
 }
 
-.desktop-only {
+@mixin desktop-only {
 	@include mobile {
 		display: none !important;
 		mso-hide: all !important;
-	}
-}
-
-.w-100p {
-	@include mobile {
-		width: 100% !important;
 	}
 }
 
@@ -56,43 +50,15 @@
 	text-decoration: underline !important;
 }
 
-.full-width-img {
-	display: block;
-	font-family: $ff-sans;
-	@include mobile {
-		width: 100% !important;
-	}
-}
-
 @include mobile {
 	.bgcolor-none {
 		background-color: transparent !important;
 	}
-
-	/* HEIGHT & WIDTH */
-	//@each $height in (8, 10, 12, 18, 21, 24, 35) {
-	//	.h-#{$height} {
-	//		height: #{$height}px !important;
-	//	}
-	//}
-	//@each $width in (8, 12, 158, 192, 21) {
-	//	.w-#{$width} {
-	//		width: #{$width}px !important;
-	//	}
-	//}
-	//@each $width in (100, 95, 2, 0) {
-	//	.w-#{$width}p {
-	//		width: unquote("#{$width}% !important");
-	//	}
-	//}
+	.w-100p {
+		width: 100% !important;
+	}
 	.w-auto {
 		width: auto !important;
-	}
-
-	/* MIXED */
-	.w-100p-mw-356 {
-		width: 100% !important;
-		max-width: 356px !important;
 	}
 	.display-block-w-100p {
 		display: block !important;
