@@ -51,7 +51,7 @@ class Container
 			HTMLEmail::buildTable([
 				'width' => $this->width,
 				'class' => $this->class,
-			])->addChild(
+			])->add(
 				$this->htmlEmail->domCollection
 			),
 			TextNode::new('<!-- End Container -->')
@@ -59,7 +59,7 @@ class Container
 		return $this->use ?
 			[
 				HTMLEmail::buildTable(['width' => $this->width, 'class' => $this->class])->addChildren([
-					ElemNode::new('tr')->addChild(
+					ElemNode::new('tr')->add(
 						ElemNode::new('td')->attrs([
 							'bgcolor' => $this->bgColor,
 							'style'   => 'background-color:' . hex2rgba($this->bgColor)

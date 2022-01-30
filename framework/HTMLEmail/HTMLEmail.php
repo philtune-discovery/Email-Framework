@@ -3,7 +3,7 @@
 namespace HTMLEmail;
 
 use HTMLEmail\Container\Container;
-use HTMLEmail\EmailAttributeBuilder\EmailAttributeBuilder;
+use HTMLEmail\EmailAttributeBuilder\AttributeBuilder;
 use NodeBuilder\NodeBuilder;
 use NodeBuilder\NodeCollection;
 
@@ -28,7 +28,7 @@ class HTMLEmail
 		$this->txtcolor = $config['txtcolor'] ?? '#000000';
 		$this->previewText($config['preview-text'] ?? null);
 		$this->container = new Container($this, $config['container']);
-		NodeBuilder::setAttributeBuilderClass(EmailAttributeBuilder::class);
+		NodeBuilder::setAttributeBuilderClass(AttributeBuilder::class);
 		$this->domCollection = NodeCollection::new();
 	}
 

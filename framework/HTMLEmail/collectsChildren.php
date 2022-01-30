@@ -18,9 +18,9 @@ trait collectsChildren
 		return $this;
 	}
 
-	public function addRow(NodeBuilder $child):self
+	public function addRow(NodeBuilder $_child):self
 	{
-		return $this->add(HTMLEmail::row($child));
+		return $this->add(HTMLEmail::row($_child));
 	}
 
 	public function addImgRow($src, string $alt = null, string $href = null):self
@@ -51,17 +51,17 @@ trait collectsChildren
 	public function addColumns(...$children_):self
 	{
 		$children_ = array_map(
-			fn($child) => is_array($child) ?
+			fn($_child) => is_array($_child) ?
 				ElemNode::new('td')
-				        ->attrs($child[0])
-				        ->addChildren($child[1]) :
-				$child,
+				        ->attrs($_child[0])
+				        ->addChildren($_child[1]) :
+				$_child,
 			$children_
 		);
 		return $this->add(
-			ElemNode::new('tr')->addChild(
-				ElemNode::new('td')->addChild(
-					HTMLEmail::buildTable()->addChild(
+			ElemNode::new('tr')->add(
+				ElemNode::new('td')->add(
+					HTMLEmail::buildTable()->add(
 						ElemNode::new('tr')->addChildren(
 							$children_
 						)
@@ -81,7 +81,7 @@ trait collectsChildren
 			$urls
 		);
 		return $this->add(
-			ElemNode::new('tr')->addChild(
+			ElemNode::new('tr')->add(
 				ElemNode::new('td')->addChildren($imgs_)
 			)
 		);

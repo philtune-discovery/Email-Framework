@@ -2,14 +2,14 @@
 
 namespace HTMLEmail\EmailAttributeBuilder;
 
-use NodeBuilder\AttributeBuilder;
+use NodeBuilder\AttributeBuilder as NodeAttributeBuilder;
 use NodeBuilder\NodeBuilder;
 use Styles\Stylesheet;
 
-class EmailAttributeBuilder extends AttributeBuilder
+class AttributeBuilder extends NodeAttributeBuilder
 {
 
-	protected NodeBuilder $dom;
+	protected NodeBuilder $nodeBuilder;
 	protected string $uid;
 	protected array $styles = [];
 	protected array $pseudos = [];
@@ -25,7 +25,7 @@ class EmailAttributeBuilder extends AttributeBuilder
 			if ( is_array($val) ) {
 				if ( substr($key, 0, 1) === ':' ) {
 					Stylesheet::pseudo($this->uid, $key, $val);
-					$this->dom->attrs(['class' => $this->uid]);
+					$this->nodeBuilder->attrs(['class' => $this->uid]);
 				}
 			} else {
 				$this->styles[$key] = $val;

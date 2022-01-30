@@ -5,7 +5,7 @@ namespace NodeBuilder;
 abstract class NodeBuilder implements MustRender
 {
 	use rendersParts;
-	use hasChildren;
+	use collectsChildren;
 
 	protected string $tagName = '';
 	private static string $attributeBuilderClass = AttributeBuilder::class;

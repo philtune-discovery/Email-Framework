@@ -31,11 +31,11 @@ trait rendersParts
 	protected function renderChildren():string
 	{
 		$children_ = array_map(
-			function (NodeBuilder $child) {
-				$child->tabNum = $this->useWhitespace ?
+			function (NodeBuilder $_child) {
+				$_child->tabNum = $this->useWhitespace ?
 					$this->tabNum + 1 :
 					0;
-				return $child;
+				return $_child;
 			},
 			$this->children_
 		);

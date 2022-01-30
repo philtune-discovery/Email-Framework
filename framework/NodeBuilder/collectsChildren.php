@@ -2,22 +2,22 @@
 
 namespace NodeBuilder;
 
-trait hasChildren
+trait collectsChildren
 {
 
 	/** @var NodeBuilder[] */
 	protected array $children_ = [];
 
 	/**
-	 * @param NodeBuilder $child
+	 * @param NodeBuilder $_child
 	 * @return $this
 	 */
-	public function addChild(NodeBuilder $child):self
+	public function add(NodeBuilder $_child):self
 	{
 		if ( !$this->useWhitespace ) {
-			$child->useWhitespace = false;
+			$_child->useWhitespace = false;
 		}
-		$this->children_[] = $child;
+		$this->children_[] = $_child;
 		return $this;
 	}
 
@@ -28,7 +28,7 @@ trait hasChildren
 	public function addChildren(array $children_):self
 	{
 		array_map(
-			fn(NodeBuilder $child) => $this->addChild($child),
+			fn(NodeBuilder $_child) => $this->add($_child),
 			$children_
 		);
 		return $this;
@@ -40,12 +40,12 @@ trait hasChildren
 	 */
 	public function addText(string $text):self
 	{
-		return $this->addChild(TextNode::new($text));
+		return $this->add(TextNode::new($text));
 	}
 
 	public function addSelfClosing(string $tagName, ?array $attrs = []):self
 	{
-		return $this->addChild(
+		return $this->add(
 			SelfClosingNode::new($tagName)
 			               ->attrs($attrs)
 		);

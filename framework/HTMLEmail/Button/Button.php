@@ -119,13 +119,13 @@ class Button
 
 		$rect
 			->addSelfClosing('w:anchorlock')
-			->addChild($_center);
+			->add($_center);
 
 		$_a = ElemNode::new('a')->attrs(['href' => $this->href])->addText($this->text);
 		$_clone_a = clone $_a;
 		if ( !( $this->buttonStyle('border-color') && $this->buttonStyle('background-image') ) ) {
-			$_center->addChild($_clone_a);
-			$_outer = ConditionalComment::new('!mso')->addChild($_a);
+			$_center->add($_clone_a);
+			$_outer = ConditionalComment::new('!mso')->add($_a);
 		} else {
 			$this->aStyles['mso-hide'] = 'all';
 			$_center->attrs(['style' => toStyleStr($this->textStyles)]);
@@ -144,7 +144,7 @@ class Button
 		}
 
 		return ElemNode::new('div')->addChildren([
-			ConditionalComment::new('mso')->addChild($rect),
+			ConditionalComment::new('mso')->add($rect),
 			$_outer
 		]);
 	}

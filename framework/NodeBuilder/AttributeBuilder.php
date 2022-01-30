@@ -2,7 +2,7 @@
 
 namespace NodeBuilder;
 
-class AttributeBuilder
+class AttributeBuilder implements MustRender
 {
 
 	private array $attrs = [];
@@ -18,7 +18,7 @@ class AttributeBuilder
 		return static::serialize($this->attrs);
 	}
 
-	public static function serialize(array $arr):string
+	private static function serialize(array $arr):string
 	{
 		return static::implode_kvps(' ', $arr,
 			fn($a, $b) => is_numeric($a) ?
@@ -26,7 +26,7 @@ class AttributeBuilder
 				"$a=\"$b\"");
 	}
 
-	public static function implode_kvps(string $separator, array $array, callable $callback):string
+	private static function implode_kvps(string $separator, array $array, callable $callback):string
 	{
 		return implode($separator, array_map(fn($pair) => $callback(...$pair), array_entries($array)));
 	}
