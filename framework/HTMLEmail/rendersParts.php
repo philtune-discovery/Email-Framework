@@ -36,8 +36,8 @@ trait rendersParts
 			'xmlns:v' => "urn:schemas-microsoft-com:vml",
 			'xmlns:w' => "urn:schemas-microsoft-com:office:word",
 		])
-		               ->add($this->getHead())
-		               ->add($this->getBody());
+		               ->addChild($this->getHead())
+		               ->addChild($this->getBody());
 	}
 
 	private function getHead():ElemNode
@@ -75,10 +75,10 @@ trait rendersParts
 				'padding'                  => 0,
 				'color'                    => $this->txtcolor,
 			])
-		])->add(
+		])->addChild(
 			ElemNode::new('table')->attrs(getTableAttrs())->addChildren([
 				$this->getPreviewText(),
-				ElemNode::new('tr')->add(
+				ElemNode::new('tr')->addChild(
 					ElemNode::new('td')->attrs([
 						'bgcolor' => $this->bgcolor,
 						'align'   => 'center',
@@ -92,7 +92,7 @@ trait rendersParts
 	private function getPreviewText():NodeBuilder
 	{
 		return $this->previewText ?
-			ElemNode::new('tr')->add(
+			ElemNode::new('tr')->addChild(
 				ElemNode::new('td')->addChildren([
 					ElemNode::new('div')->attrs([
 						'style' => toStyleStr([
@@ -107,7 +107,7 @@ trait rendersParts
 							'opacity'     => '0',
 							'overflow'    => 'hidden'
 						])
-					])->add(
+					])->addChild(
 						TextNode::new($this->previewText)
 					)
 				])

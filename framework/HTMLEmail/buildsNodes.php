@@ -33,22 +33,21 @@ trait buildsNodes
 		$left_padding = $padding[3] ?? $right_padding;
 		return NodeCollection::new()->addChildren([
 			self::buildRowPadding($top_padding),
-			ElemNode::new('tr')->add(
-				ElemNode::new('td')->add(
+			ElemNode::new('tr')->addChild(
+				ElemNode::new('td')->addChild(
 					ElemNode::new('table')->attrs([
 						'width'       => "100%",
 						'cellpadding' => "0",
 						'cellspacing' => "0",
 						'border'      => "0",
 						'role'        => "presentation",
-						'style'       => toStyleStr([
-							'mso-cellspacing' => '0px',
-							'mso-padding-alt' => '0px 0px 0px 0px'
-						]),
-					])->add(
+					])->style([
+						'mso-cellspacing' => '0px',
+						'mso-padding-alt' => '0px 0px 0px 0px'
+					])->addChild(
 						ElemNode::new('tr')->addChildren([
 							self::buildColumn($left_padding),
-							self::buildColumn([])->add(
+							self::buildColumn([])->addChild(
 								ElemNode::new('table')->attrs([
 									'width'       => "100%",
 									'cellpadding' => "0",
@@ -81,13 +80,13 @@ trait buildsNodes
 	 */
 	public static function buildRowPadding($height):ElemNode
 	{
-		return ElemNode::new('tr')->add(
+		return ElemNode::new('tr')->addChild(
 			ElemNode::new('td')->attrs([
 				'height' => $height,
 				'style'  => 'font-size:0px'
 			])
 			        ->useWhitespace(false)
-			        ->add(
+			        ->addChild(
 				        TextNode::new('&nbsp;')
 			        )
 		);
@@ -116,7 +115,7 @@ trait buildsNodes
 					'style' => 'font-size:0px'
 				])
 				        ->useWhitespace(false)
-				        ->add(
+				        ->addChild(
 					        TextNode::new('&nbsp;')
 				        ) :
 				ElemNode::new('td')->attrs([
@@ -135,10 +134,10 @@ trait buildsNodes
 		$_child = is_string($string_or_node) ?
 			TextNode::new($string_or_node) :
 			$string_or_node;
-		return ElemNode::new('tr')->add(
+		return ElemNode::new('tr')->addChild(
 			ElemNode::new('td')
 			        ->attrs($attrs)
-			        ->add($_child)
+			        ->addChild($_child)
 		);
 	}
 
@@ -207,14 +206,14 @@ trait buildsNodes
 		}
 		$imgNode = SelfClosingNode::new('img')->attrs($attrs);
 		return $href ?
-			ElemNode::new('a')->attrs(['href' => $href, 'target' => '_blank'])->add($imgNode) :
+			ElemNode::new('a')->attrs(['href' => $href, 'target' => '_blank'])->addChild($imgNode) :
 			$imgNode;
 	}
 
 	public static function row(NodeBuilder $_child):ElemNode
 	{
-		return ElemNode::new('tr')->add(
-			ElemNode::new('td')->add($_child)
+		return ElemNode::new('tr')->addChild(
+			ElemNode::new('td')->addChild($_child)
 		);
 	}
 }

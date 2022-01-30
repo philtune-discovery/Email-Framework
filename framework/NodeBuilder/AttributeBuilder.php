@@ -5,11 +5,17 @@ namespace NodeBuilder;
 class AttributeBuilder implements MustRender
 {
 
-	private array $attrs = [];
+	protected array $attrs = [];
 
-	public function add(...$attrs):self
+	public function addAttrs(...$attr_groups):self
 	{
-		$this->attrs = array_merge($this->attrs, ...$attrs);
+		$this->attrs = array_merge_recursive($this->attrs, ...$attr_groups);
+		return $this;
+	}
+
+	public function addStyles(...$styles):self
+	{
+		$this->addAttrs(['style' => array_merge_recursive($styles)]);
 		return $this;
 	}
 

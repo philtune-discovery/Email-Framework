@@ -12,7 +12,7 @@ trait collectsChildren
 	 * @param NodeBuilder $_child
 	 * @return $this
 	 */
-	public function add(NodeBuilder $_child):self
+	public function addChild(NodeBuilder $_child):self
 	{
 		if ( !$this->useWhitespace ) {
 			$_child->useWhitespace = false;
@@ -28,7 +28,7 @@ trait collectsChildren
 	public function addChildren(array $children_):self
 	{
 		array_map(
-			fn(NodeBuilder $_child) => $this->add($_child),
+			fn(NodeBuilder $_child) => $this->addChild($_child),
 			$children_
 		);
 		return $this;
@@ -40,12 +40,12 @@ trait collectsChildren
 	 */
 	public function addText(string $text):self
 	{
-		return $this->add(TextNode::new($text));
+		return $this->addChild(TextNode::new($text));
 	}
 
 	public function addSelfClosing(string $tagName, ?array $attrs = []):self
 	{
-		return $this->add(
+		return $this->addChild(
 			SelfClosingNode::new($tagName)
 			               ->attrs($attrs)
 		);

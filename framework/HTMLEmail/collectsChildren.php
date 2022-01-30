@@ -59,9 +59,9 @@ trait collectsChildren
 			$children_
 		);
 		return $this->add(
-			ElemNode::new('tr')->add(
-				ElemNode::new('td')->add(
-					HTMLEmail::buildTable()->add(
+			ElemNode::new('tr')->addChild(
+				ElemNode::new('td')->addChild(
+					HTMLEmail::buildTable()->addChild(
 						ElemNode::new('tr')->addChildren(
 							$children_
 						)
@@ -81,7 +81,7 @@ trait collectsChildren
 			$urls
 		);
 		return $this->add(
-			ElemNode::new('tr')->add(
+			ElemNode::new('tr')->addChild(
 				ElemNode::new('td')->addChildren($imgs_)
 			)
 		);

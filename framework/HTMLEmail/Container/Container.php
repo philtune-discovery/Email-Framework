@@ -51,7 +51,7 @@ class Container
 			HTMLEmail::buildTable([
 				'width' => $this->width,
 				'class' => $this->class,
-			])->add(
+			])->addChild(
 				$this->htmlEmail->domCollection
 			),
 			TextNode::new('<!-- End Container -->')
@@ -59,18 +59,16 @@ class Container
 		return $this->use ?
 			[
 				HTMLEmail::buildTable(['width' => $this->width, 'class' => $this->class])->addChildren([
-					ElemNode::new('tr')->add(
+					ElemNode::new('tr')->addChild(
 						ElemNode::new('td')->attrs([
 							'bgcolor' => $this->bgColor,
 							'style'   => 'background-color:' . hex2rgba($this->bgColor)
 						])->addChildren([
 							TextNode::new($this->getIEWrapper(fn(string $html):string => "<!--[if mso | IE]>$html<![endif]-->")),
-							ElemNode::new('div')->attrs([
-								'style' => toStyleStr([
-									'max-width' => toPx($this->width),
-									'margin'    => '0px auto',
-									'border'    => $this->border,
-								])
+							ElemNode::new('div')->style([
+								'max-width' => toPx($this->width),
+								'margin'    => '0px auto',
+								'border'    => $this->border,
 							])->addChildren($_inner),
 							TextNode::new("<!--[if mso | IE]></td></tr></table><![endif]-->")
 						])

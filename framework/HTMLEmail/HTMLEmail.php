@@ -23,12 +23,12 @@ class HTMLEmail
 
 	private function __construct(array $config = [])
 	{
+		NodeBuilder::setAttributeBuilderClass(AttributeBuilder::class);
 		$this->title = $config['title'] ?? 'Email';
 		$this->bgcolor = $config['bgcolor'] ?? '#FFFFFF';
 		$this->txtcolor = $config['txtcolor'] ?? '#000000';
 		$this->previewText($config['preview-text'] ?? null);
 		$this->container = new Container($this, $config['container']);
-		NodeBuilder::setAttributeBuilderClass(AttributeBuilder::class);
 		$this->domCollection = NodeCollection::new();
 	}
 

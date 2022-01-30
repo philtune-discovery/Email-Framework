@@ -30,14 +30,22 @@ abstract class NodeBuilder implements MustRender
 
 	public static function setAttributeBuilderClass(string $attributeBuilderClass)
 	{
-		if ( is_a($attributeBuilderClass, AttributeBuilder::class) ) {
+		if ( is_subclass_of($attributeBuilderClass, AttributeBuilder::class) ) {
 			self::$attributeBuilderClass = $attributeBuilderClass;
+		} else {
+			json_out([AttributeBuilder::class, $attributeBuilderClass, get_parent_class($attributeBuilderClass)]);
 		}
 	}
 
 	public function attrs(...$attrs):self
 	{
-		$this->attrBuilder->add(...$attrs);
+		$this->attrBuilder->addAttrs(...$attrs);
+		return $this;
+	}
+
+	public function style(...$styles):self
+	{
+		$this->attrBuilder->addStyles(...$styles);
 		return $this;
 	}
 

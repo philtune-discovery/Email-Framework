@@ -99,11 +99,11 @@ class Button
 
 		$rect->attrs([
 			'href'  => $this->href,
-			'style' => toStyleStr([
+			'style' => [
 				'height'        => $this->toUnit('height'),
 				'v-text-anchor' => 'middle',
 				'width'         => $this->toUnit('width'),
-			]),
+			],
 		]);
 
 		if ( $background_image = $this->buttonStyle('background-image') ) {
@@ -119,23 +119,23 @@ class Button
 
 		$rect
 			->addSelfClosing('w:anchorlock')
-			->add($_center);
+			->addChild($_center);
 
 		$_a = ElemNode::new('a')->attrs(['href' => $this->href])->addText($this->text);
 		$_clone_a = clone $_a;
 		if ( !( $this->buttonStyle('border-color') && $this->buttonStyle('background-image') ) ) {
-			$_center->add($_clone_a);
-			$_outer = ConditionalComment::new('!mso')->add($_a);
+			$_center->addChild($_clone_a);
+			$_outer = ConditionalComment::new('!mso')->addChild($_a);
 		} else {
 			$this->aStyles['mso-hide'] = 'all';
-			$_center->attrs(['style' => toStyleStr($this->textStyles)]);
+			$_center->attrs(['style' => $this->textStyles]);
 			$_outer =& $_a;
 		}
 
 		$a_styles = $this->getAStyles();
 
-		$_a->attrs(['style' => toStyleStr($a_styles)]);
-		$_clone_a->attrs(['style' => toStyleStr($a_styles)]);
+		$_a->attrs(['style' => $a_styles]);
+		$_clone_a->attrs(['style' => $a_styles]);
 
 		if ( $border_color = $this->buttonStyle('border-color') ) {
 			$rect->attrs(['strokecolor' => $border_color]);
@@ -144,7 +144,7 @@ class Button
 		}
 
 		return ElemNode::new('div')->addChildren([
-			ConditionalComment::new('mso')->add($rect),
+			ConditionalComment::new('mso')->addChild($rect),
 			$_outer
 		]);
 	}

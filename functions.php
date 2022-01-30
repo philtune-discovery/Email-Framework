@@ -70,7 +70,7 @@ function myButton(string $text, string $href, $width):NodeBuilder
 		'text-transform' => 'uppercase',
 		'letter-spacing' => '0.05em',
 	];
-	return button($text, $href, $buttonStyles, $textStyles);
+	return HTMLEmail::buildButton($text, $href, $buttonStyles, $textStyles);
 }
 
 function myLegal():NodeBuilder
