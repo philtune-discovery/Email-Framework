@@ -15,7 +15,7 @@ class AttributeBuilder implements MustRender
 
 	public function addStyles(...$styles):self
 	{
-		$this->addAttrs(['style' => array_merge_recursive($styles)]);
+		$this->addAttrs(['style' => array_merge_recursive(...$styles)]);
 		return $this;
 	}
 

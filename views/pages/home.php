@@ -4,7 +4,6 @@ use function HTMLEmail\col;
 use function HTMLEmail\row_padding;
 use function HTMLEmail\rows;
 use function HTMLEmail\text_row;
-use function HTMLEmail\toStyleStr;
 
 echo myEmail('HTML Email Framework')
 	->addImgRow(
@@ -24,25 +23,25 @@ echo myEmail('HTML Email Framework')
 			rows(
 				text_row(
 					'Dream It. Do It.',
-					['style' => toStyleStr([
+					['style' => [
 						'font-family'    => "'Helvetica Neue',Helvetica,Arial,sans-serif",
 						'font-weight'    => 700,
 						'font-size'      => "32px",
 						'color'          => "#444244",
 						'text-transform' => 'uppercase',
-					])]
+					]]
 				),
 				row_padding(10),
 				text_row(
 					"We're your one-stop destination for cabinets, closets, flooring, and more. We’ll help you turn your house into your dream home.",
-					['style' => toStyleStr([
+					['style' => [
 						'font-family' => "'Helvetica Neue',Helvetica,Arial,sans-serif",
 						'font-weight' => 300,
 						'line-height' => 1.27778,
 						'font-size'   => "18px",
 						'font-style'  => "italic",
 						'color'       => "#666666",
-					])]
+					]]
 				),
 				row_padding(10),
 				myButton(

@@ -4,12 +4,10 @@ use HTMLEmail\HTMLEmail;
 use NodeBuilder\ElemNode;
 use NodeBuilder\NodeBuilder;
 use function HTMLEmail\a;
-use function HTMLEmail\button;
 use function HTMLEmail\col;
 use function HTMLEmail\img;
 use function HTMLEmail\padded;
 use function HTMLEmail\text_rows;
-use function HTMLEmail\toStyleStr;
 
 const COMP_WIDTH = 639;
 const CONTAINER_WIDTH = 630;
@@ -77,10 +75,10 @@ function myLegal():NodeBuilder
 {
 	$a = function (string $text, string $href, array $addl_styles = []):ElemNode {
 		$attrs = [
-			'style' => toStyleStr(array_merge([
+			'style' => array_merge([
 				'color'           => 'blue',
 				'text-decoration' => 'none'
-			], $addl_styles)),
+			], $addl_styles),
 			'class' => 'hvr-td-u'
 		];
 		return a($text, $href)->attrs($attrs);
@@ -114,12 +112,12 @@ function myLegal():NodeBuilder
 			],
 			[
 				'align' => 'center',
-				'style' => toStyleStr([
+				'style' => [
 					'font-family' => "'Helvetica Neue',Helvetica,Arial,sans-serif",
 					'font-size'   => '11px',
 					'line-height' => '12px',
 					'color'       => '#555',
-				]),
+				],
 			],
 			15
 		)

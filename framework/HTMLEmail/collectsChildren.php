@@ -72,13 +72,17 @@ trait collectsChildren
 	}
 
 	/**
-	 * @param string[] $urls
+	 * @param string[] $srcs
 	 */
-	public function addTrackingPixels(array $urls):self
+	public function addTrackingPixels(array $srcs):self
 	{
 		$imgs_ = array_map(
-			fn($url) => HTMLEmail::img($url, null, null, ['height' => 1, 'width' => 1]),
-			$urls
+			fn($src) => HTMLEmail::img([
+				'src'    => $src,
+				'height' => 1,
+				'width'  => 1,
+			]),
+			$srcs
 		);
 		return $this->add(
 			ElemNode::new('tr')->addChild(

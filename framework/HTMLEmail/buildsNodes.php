@@ -53,11 +53,10 @@ trait buildsNodes
 									'cellpadding' => "0",
 									'cellspacing' => "0",
 									'border'      => "0",
-									'role'        => "presentation",
-									'style'       => toStyleStr([
-										'mso-cellspacing' => '0px',
-										'mso-padding-alt' => '0px 0px 0px 0px'
-									]),
+									'role'        => "presentation"
+								])->style([
+									'mso-cellspacing' => '0px',
+									'mso-padding-alt' => '0px 0px 0px 0px'
 								])->addChildren($children_)
 							),
 							self::buildColumn($right_padding),

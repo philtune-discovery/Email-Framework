@@ -25,7 +25,12 @@ function getTableAttrs(array $mergeAttrs = [], array $mergeStyles = []):array
 function toStyleStr(array $arr, ...$other_arrs):string
 {
 	$arr = array_merge($arr, ...$other_arrs);
-	return implode_kvps(';', $arr, fn($a, $b) => "$a:$b");
+	return implode_kvps(';', $arr, function ($a, $b) {
+		if ( is_array($b) ) {
+			json_out($b);
+		}
+		return "$a:$b";
+	});
 }
 
 function toAttrStr(array $attrs, ...$other_attrs):string

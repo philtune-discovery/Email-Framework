@@ -22,10 +22,10 @@ class AttributeBuilder extends NodeAttributeBuilder
 
 	public function addAttrs(...$attr_groups):self
 	{
-		array_walk($attr_groups, function(&$attrs) {
-			if ( ($style = $attrs['style'] ?? null) && is_string($style) ) {
+		array_walk($attr_groups, function (&$attrs) {
+			if ( ( $style = $attrs['style'] ?? null ) && is_string($style) ) {
 				$attrs['style'] = [];
-				foreach (explode(';', $style) as $kvp_str ) {
+				foreach ( explode(';', $style) as $kvp_str ) {
 					list($prop, $val) = explode(':', $kvp_str);
 					$attrs['style'][$prop] = $val;
 				}
@@ -37,11 +37,8 @@ class AttributeBuilder extends NodeAttributeBuilder
 
 	public function render():string
 	{
-		if ( $style = $this->attrs['style'] ?? null ) {
-			if ( is_string($style) ) {
-				json_out($style);
-			}
-			$this->attrs['style'] = toStyleStr($style);
+		if ( is_array($this->attrs['style'] ?? null) ) {
+			$this->attrs['style'] = toStyleStr($this->attrs['style']);
 		}
 		return parent::render();
 	}

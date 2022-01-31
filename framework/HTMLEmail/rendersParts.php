@@ -3,8 +3,8 @@
 namespace HTMLEmail;
 
 use NodeBuilder\ConditionalComment;
-use NodeBuilder\NodeBuilder;
 use NodeBuilder\ElemNode;
+use NodeBuilder\NodeBuilder;
 use NodeBuilder\TextNode;
 use Styles\Stylesheet;
 
@@ -67,14 +67,13 @@ trait rendersParts
 	{
 		return ElemNode::new('body')->attrs([
 			'width'   => '100%',
-			'bgcolor' => $this->bgcolor,
-			'style'   => toStyleStr([
-				'-webkit-text-size-adjust' => '100%',
-				'-ms-text-size-adjust'     => '100%',
-				'margin'                   => 0,
-				'padding'                  => 0,
-				'color'                    => $this->txtcolor,
-			])
+			'bgcolor' => $this->bgcolor
+		])->style([
+			'-webkit-text-size-adjust' => '100%',
+			'-ms-text-size-adjust'     => '100%',
+			'margin'                   => 0,
+			'padding'                  => 0,
+			'color'                    => $this->txtcolor,
 		])->addChild(
 			ElemNode::new('table')->attrs(getTableAttrs())->addChildren([
 				$this->getPreviewText(),
@@ -94,19 +93,17 @@ trait rendersParts
 		return $this->previewText ?
 			ElemNode::new('tr')->addChild(
 				ElemNode::new('td')->addChildren([
-					ElemNode::new('div')->attrs([
-						'style' => toStyleStr([
-							'display'     => 'none !important',
-							'visibility'  => 'hidden',
-							'mso-hide'    => 'all',
-							'font-size'   => '1pt',
-							'color'       => '#ffffff',
-							'line-height' => '1px',
-							'max-height'  => 'none',
-							'max-width'   => 'none',
-							'opacity'     => '0',
-							'overflow'    => 'hidden'
-						])
+					ElemNode::new('div')->style([
+						'display'     => 'none !important',
+						'visibility'  => 'hidden',
+						'mso-hide'    => 'all',
+						'font-size'   => '1pt',
+						'color'       => '#ffffff',
+						'line-height' => '1px',
+						'max-height'  => 'none',
+						'max-width'   => 'none',
+						'opacity'     => '0',
+						'overflow'    => 'hidden'
 					])->addChild(
 						TextNode::new($this->previewText)
 					)

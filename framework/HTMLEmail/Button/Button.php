@@ -3,9 +3,8 @@
 namespace HTMLEmail\Button;
 
 use NodeBuilder\ConditionalComment;
-use NodeBuilder\NodeBuilder;
 use NodeBuilder\ElemNode;
-use function HTMLEmail\toStyleStr;
+use NodeBuilder\NodeBuilder;
 
 class Button
 {
@@ -69,6 +68,7 @@ class Button
 
 	private function getAStyles():array
 	{
+		return [];
 		return array_merge(
 			[
 				'display'                  => 'inline-block',
@@ -149,110 +149,3 @@ class Button
 		]);
 	}
 }
-
-/*
-<!-- No border-color | background-image | border-radius -->
-<div><!--[if mso]>
-	<v:rect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://abcd"
-			style="height:53px;v-text-anchor:middle;width:200px;" stroke="f" fillcolor="#49a9ce">
-		<w:anchorlock/>
-		<center>
-	<![endif]-->
-	<a href="http://abcd"
-	   style="background-color:#49a9ce;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:53px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">Show
-		me the button!</a>
-	<!--[if mso]>
-	</center>
-	</v:rect>
-	<![endif]--></div>
-
-
-<!-- No border-color | background-image --- WITH border-radius -->
-<div><!--[if mso]>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-				 href="http://abcd" style="height:53px;v-text-anchor:middle;width:200px;" arcsize="8%" stroke="f"
-				 fillcolor="#49a9ce">
-		<w:anchorlock/>
-		<center>
-	<![endif]-->
-	<a href="http://abcd"
-	   style="background-color:#49a9ce;border-radius:4px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:53px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">Show
-		me the button!</a>
-	<!--[if mso]>
-	</center>
-	</v:roundrect>
-	<![endif]--></div>
-
-
-<!-- No border-color | border-radius --- WITH background-image -->
-<div><!--[if mso]>
-	<v:rect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://abcd"
-			style="height:53px;v-text-anchor:middle;width:200px;" stroke="f" fill="t">
-		<v:fill type="tile" src="https://imgur.com/5BIp9d0.gif" color="#49a9ce"/>
-		<w:anchorlock/>
-		<center style="color:#FFFFFF;font-family:sans-serif;font-size:13px;font-weight:bold;">Show me the button!
-		</center>
-	</v:rect>
-	<![endif]--><a href="http://abcd"
-				   style="background-color:#49a9ce;background-image:url('https://imgur.com/5BIp9d0.gif');color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:53px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;">Show
-		me the button!</a></div>
-
-
-<!-- No background-image --- WITH border-color & border-radius -->
-<div><!--[if mso]>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-				 href="http://abcd" style="height:53px;v-text-anchor:middle;width:200px;" arcsize="8%"
-				 strokecolor="#ffffff" fillcolor="#49a9ce">
-		<w:anchorlock/>
-		<center style="color:#FFFFFF;font-family:sans-serif;font-size:13px;font-weight:bold;">Show me the button!
-		</center>
-	</v:roundrect>
-	<![endif]--><a href="http://abcd"
-				   style="background-color:#49a9ce;border:1px solid #ffffff;border-radius:4px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:53px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;">Show
-		me the button!</a></div>
-
-
-<!-- WITH border-color & border-radius & background-image -->
-<div><!--[if mso]>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-				 href="http://abcd" style="height:53px;v-text-anchor:middle;width:200px;" arcsize="8%"
-				 strokecolor="#ffffff" fill="t">
-		<v:fill type="tile" src="https://imgur.com/5BIp9d0.gif" color="#49a9ce"/>
-		<w:anchorlock/>
-		<center style="color:#FFFFFF;font-family:sans-serif;font-size:13px;font-weight:bold;">Show me the button!
-		</center>
-	</v:roundrect>
-	<![endif]--><a href="http://abcd"
-				   style="background-color:#49a9ce;background-image:url('https://imgur.com/5BIp9d0.gif');border:1px
-	solid
-	#ffffff;border-radius:4px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:53px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;">Show
-		me the button!</a></div>
-
-
-<!-- No border-color --- WITH border-radius & background-image -->
-<div><!--[if mso]>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-				 href="http://abcd" style="height:53px;v-text-anchor:middle;width:200px;" arcsize="8%" stroke="f"
-				 fill="t">
-		<v:fill type="tile" src="https://imgur.com/5BIp9d0.gif" color="#49a9ce"/>
-		<w:anchorlock/>
-		<center style="color:#FFFFFF;font-family:sans-serif;font-size:13px;font-weight:bold;">Show me the button!
-		</center>
-	</v:roundrect>
-	<![endif]--><a href="http://abcd"
-				   style="background-color:#49a9ce;background-image:url('https://imgur.com/5BIp9d0.gif');border-radius:4px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:53px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;">Show
-		me the button!</a></div>
-
-
-<!-- No border-radius | background-image --- WITH border-color -->
-<div><!--[if mso]>
-	<v:rect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://abcd"
-			style="height:53px;v-text-anchor:middle;width:200px;" strokecolor="#ffffff" fillcolor="#49a9ce">
-		<w:anchorlock/>
-		<center style="color:#FFFFFF;font-family:sans-serif;font-size:13px;font-weight:bold;">Show me the button!
-		</center>
-	</v:rect>
-	<![endif]--><a href="http://abcd"
-				   style="background-color:#49a9ce;border:1px solid #ffffff;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:53px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;">Show
-		me the button!</a></div>
- */
