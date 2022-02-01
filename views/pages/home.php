@@ -9,7 +9,7 @@ echo myEmail('HTML Email Framework')
 	->addImgRow(
 		src('/img/header.png'),
 		"HGTV Dream Home Proud Sponsor 2022 | Cabinets To Go - Wow For Less.",
-		'https://ad.doubleclick.net/ddm/trackclk/N636.3140998DISCOVERYCHANNEL/B26331212.312029041;dc_trk_aid=517031567;dc_trk_cid=163820815;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=',
+		"https://ad.doubleclick.net/ddm/trackclk/N636.3140998DISCOVERYCHANNEL/B26331212.312029041;dc_trk_aid=517031567;dc_trk_cid=163820815;dc_lat=;dc_rdid=;tag_for_child_directed_treatment=;tfua=;ltd=",
 	)
 	->addImgRow(
 		src('/img/kitchen.jpg'),

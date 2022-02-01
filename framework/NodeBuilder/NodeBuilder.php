@@ -2,9 +2,11 @@
 
 namespace NodeBuilder;
 
+use NodeBuilder\AttributeBuilder\AttributeBuilder;
+
 abstract class NodeBuilder implements MustRender
 {
-	use rendersParts;
+	use rendersNodeParts;
 	use collectsChildren;
 
 	protected string $tagName = '';
@@ -16,7 +18,7 @@ abstract class NodeBuilder implements MustRender
 	public function __construct(string $tagName = '')
 	{
 		$this->tagName = $tagName;
-		$this->attrBuilder = new self::$attributeBuilderClass();
+		$this->attrBuilder = new self::$attributeBuilderClass($this);
 	}
 
 	/**
@@ -32,8 +34,6 @@ abstract class NodeBuilder implements MustRender
 	{
 		if ( is_subclass_of($attributeBuilderClass, AttributeBuilder::class) ) {
 			self::$attributeBuilderClass = $attributeBuilderClass;
-		} else {
-			json_out([AttributeBuilder::class, $attributeBuilderClass, get_parent_class($attributeBuilderClass)]);
 		}
 	}
 

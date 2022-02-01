@@ -2,42 +2,9 @@
 
 namespace HTMLEmail;
 
-use NodeBuilder\ElemNode;
+use NodeBuilder\Extensions\ElemNode;
+use NodeBuilder\Extensions\SelfClosingNode;
 use NodeBuilder\NodeBuilder;
-use NodeBuilder\SelfClosingNode;
-
-function getTableAttrs(array $mergeAttrs = [], array $mergeStyles = []):array
-{
-	return array_merge([
-		'width'       => '100%',
-		'cellpadding' => 0,
-		'cellspacing' => 0,
-		'border'      => 0,
-		'role'        => 'presentation',
-		'style'       => toStyleStr([
-			'max-width'       => '100%',
-			'mso-cellspacing' => '0px',
-			'mso-padding-alt' => '0px 0px 0px 0px'
-		], $mergeStyles),
-	], $mergeAttrs);
-}
-
-function toStyleStr(array $arr, ...$other_arrs):string
-{
-	$arr = array_merge($arr, ...$other_arrs);
-	return implode_kvps(';', $arr, function ($a, $b) {
-		if ( is_array($b) ) {
-			json_out($b);
-		}
-		return "$a:$b";
-	});
-}
-
-function toAttrStr(array $attrs, ...$other_attrs):string
-{
-	$attrs = array_merge($attrs, ...$other_attrs);
-	return implode_kvps(' ', $attrs, fn($a, $b) => "$a=\"$b\"");
-}
 
 /**
  * @param string|numeric $input
@@ -120,5 +87,5 @@ function padded(array $padding, array $children_)
 
 function a(string $text, string $href):ElemNode
 {
-	return HTMLEmail::a($text, $href);
+	return HTMLEmail::buildLink($text, $href);
 }

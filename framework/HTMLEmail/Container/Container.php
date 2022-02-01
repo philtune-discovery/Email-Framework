@@ -2,16 +2,14 @@
 
 namespace HTMLEmail\Container;
 
+use HTMLEmail\EmailAttributeBuilder\EmailAttributeBuilder;
 use HTMLEmail\HTMLEmail;
-use NodeBuilder\ElemNode;
+use NodeBuilder\Extensions\ElemNode;
+use NodeBuilder\Extensions\TextNode;
 use NodeBuilder\NodeBuilder;
-use NodeBuilder\TextNode;
 use function hex2rgba;
-use function HTMLEmail\getTableAttrs;
 use function HTMLEmail\row_padding;
-use function HTMLEmail\toAttrStr;
 use function HTMLEmail\toPx;
-use function HTMLEmail\toStyleStr;
 
 class Container
 {
@@ -61,8 +59,9 @@ class Container
 				HTMLEmail::buildTable(['width' => $this->width, 'class' => $this->class])->addChildren([
 					ElemNode::new('tr')->addChild(
 						ElemNode::new('td')->attrs([
-							'bgcolor' => $this->bgColor,
-							'style'   => 'background-color:' . hex2rgba($this->bgColor)
+							'bgcolor' => $this->bgColor
+						])->style([
+							'background-color' => hex2rgba($this->bgColor),
 						])->addChildren([
 							TextNode::new($this->getIEWrapper(fn(string $html):string => "<!--[if mso | IE]>$html<![endif]-->")),
 							ElemNode::new('div')->style([
@@ -82,13 +81,13 @@ class Container
 
 	private function getIEWrapper(callable $cb):string
 	{
-		$table_attr_str = toAttrStr(getTableAttrs(['align' => 'center']));
-		$td_attr_str = 'style="' . toStyleStr([
-				'line-height'          => '0px',
-				'font-size'            => '0px',
-				'mso-line-height-rule' => 'exactly',
-			]) . '"';
-		return $cb("<table $table_attr_str><tr><td $td_attr_str>");
+		$table_attrs = EmailAttributeBuilder::attrs(HTMLEmail::$TABLE_ATTRS, ['align' => 'center']);
+		$td_attrs = EmailAttributeBuilder::styles([
+			'line-height'          => '0px',
+			'font-size'            => '0px',
+			'mso-line-height-rule' => 'exactly',
+		]);
+		return $cb("<table $table_attrs><tr><td $td_attrs>");
 	}
 
 }

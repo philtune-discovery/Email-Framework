@@ -1,6 +1,8 @@
 <?php
 
-namespace NodeBuilder;
+namespace NodeBuilder\Extensions;
+
+use NodeBuilder\NodeBuilder;
 
 class SelfClosingNode extends NodeBuilder
 {

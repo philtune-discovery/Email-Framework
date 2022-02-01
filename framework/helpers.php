@@ -14,17 +14,6 @@ function array_entries(array $array):array
 	return array_map(fn($key) => [$key, $array[$key]], array_keys($array));
 }
 
-/**
- * @param string $separator Glue
- * @param array $array Associative array
- * @param callable $callback <p> fn(string $key, mixed $val) </p>
- * @return string
- */
-function implode_kvps(string $separator, array $array, callable $callback):string
-{
-	return implode($separator, array_map(fn($pair) => $callback(...$pair), array_entries($array)));
-}
-
 function include_string(string $path):string
 {
 	ob_start();

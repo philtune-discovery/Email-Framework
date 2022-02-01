@@ -2,7 +2,7 @@
 
 namespace HTMLEmail;
 
-use NodeBuilder\ElemNode;
+use NodeBuilder\Extensions\ElemNode;
 use NodeBuilder\NodeBuilder;
 
 trait collectsChildren
@@ -30,18 +30,15 @@ trait collectsChildren
 			$alt = $src['alt'] ?? null;
 			$href = $src['href'] ?? null;
 		}
-		return $this->add(
-			HTMLEmail::row(
-				HTMLEmail::img([
-					'src'   => $src,
-					'alt'   => $alt,
-					'href'  => $href,
-					'width' => $this->getContainer()->getWidth(),
-					'style' => "display:block",
-					'class' => 'w-100p',
-				])
-			)
-		);
+		$img_attrs = [
+			'style' => "display:block",
+			'width' => $this->getContainer()->getWidth(),
+			'class' => 'w-100p',
+		];
+		$elemNode = $href ?
+			static::buildImgLink($src, $alt, $href, $img_attrs) :
+			static::buildImg($src, $alt, $img_attrs);
+		return $this->add(HTMLEmail::row($elemNode));
 	}
 
 	/**

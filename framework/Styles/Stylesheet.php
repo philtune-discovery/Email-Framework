@@ -3,11 +3,10 @@
 namespace Styles;
 
 use App\Stylesheetz;
-use NodeBuilder\ConditionalComment;
-use NodeBuilder\ElemNode;
-use NodeBuilder\NodeCollection;
-use NodeBuilder\TextNode;
-use HTMLEmail\HTMLEmail;
+use NodeBuilder\Extensions\ConditionalComment;
+use NodeBuilder\Extensions\ElemNode;
+use NodeBuilder\Extensions\NodeCollection;
+use NodeBuilder\Extensions\TextNode;
 
 class Stylesheet
 {
@@ -22,6 +21,7 @@ class Stylesheet
 			ElemNode::new('style')->attrs(['type' => 'text/css'])->addChildren([
 				TextNode::new(include_string('./sass/head_styles.css')),
 				TextNode::new(Stylesheetz::getPseudoStylesStr()),
+				TextNode::new(self::getPseudos()),
 				TextNode::new("@media only screen and ( max-width: 648px ) {" . Stylesheetz::getMobileStylesStr() . "}"),
 				TextNode::new("* { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif }")
 			]),
@@ -40,6 +40,13 @@ class Stylesheet
 		]);
 	}
 
+	public static function pseudos(...$pseudo_arrs):void
+	{
+		array_map(function($pseudo_arr){
+			self::pseudo(...$pseudo_arr);
+		}, $pseudo_arrs);
+	}
+
 	public static function pseudo(string $className, string $pseudo, array $styles):void
 	{
 		$_this = self::instance();
@@ -50,6 +57,20 @@ class Stylesheet
 			$_this->pseudos[$className][$pseudo] = [];
 		}
 		$_this->pseudos[$className][$pseudo] = array_merge($_this->pseudos[$className][$pseudo], $styles);
+	}
+
+	private static function getPseudos():string
+	{
+		return array_reduce(array_entries(self::instance()->pseudos), function ($str, $pair) {
+			list($className, $pseudos) = $pair;
+			return $str . array_reduce(array_entries($pseudos), function ($str, $pair) use ($className) {
+					list($pseudo, $styles) = $pair;
+					return $str .
+						".{$className}{$pseudo}{" .
+						implode(';', array_map(fn($pair)=>implode(':', $pair) . ' !important', array_entries($styles))) .
+						"}";
+				}, '');
+		}, '');
 	}
 
 }

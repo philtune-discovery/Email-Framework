@@ -2,6 +2,9 @@
 
 namespace NodeBuilder;
 
+use NodeBuilder\Extensions\SelfClosingNode;
+use NodeBuilder\Extensions\TextNode;
+
 trait collectsChildren
 {
 

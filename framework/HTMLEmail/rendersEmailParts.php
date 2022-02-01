@@ -2,13 +2,13 @@
 
 namespace HTMLEmail;
 
-use NodeBuilder\ConditionalComment;
-use NodeBuilder\ElemNode;
+use NodeBuilder\Extensions\ConditionalComment;
+use NodeBuilder\Extensions\ElemNode;
+use NodeBuilder\Extensions\TextNode;
 use NodeBuilder\NodeBuilder;
-use NodeBuilder\TextNode;
 use Styles\Stylesheet;
 
-trait rendersParts
+trait rendersEmailParts
 {
 
 	public function __toString():string
@@ -75,7 +75,7 @@ trait rendersParts
 			'padding'                  => 0,
 			'color'                    => $this->txtcolor,
 		])->addChild(
-			ElemNode::new('table')->attrs(getTableAttrs())->addChildren([
+			static::buildTable()->addChildren([
 				$this->getPreviewText(),
 				ElemNode::new('tr')->addChild(
 					ElemNode::new('td')->attrs([

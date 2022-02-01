@@ -2,17 +2,30 @@
 
 namespace HTMLEmail;
 
-use NodeBuilder\NodeBuilder;
-use NodeBuilder\ElemNode;
-use NodeBuilder\NodeCollection;
-use NodeBuilder\SelfClosingNode;
-use NodeBuilder\TextNode;
 use HTMLEmail\Button\Button;
+use NodeBuilder\Extensions\ElemNode;
+use NodeBuilder\Extensions\NodeCollection;
+use NodeBuilder\Extensions\SelfClosingNode;
+use NodeBuilder\Extensions\TextNode;
+use NodeBuilder\NodeBuilder;
 
 trait buildsNodes
 {
 
-	public static function a(string $text, string $href):ElemNode
+	public static array $TABLE_ATTRS = [
+		'width'       => '100%',
+		'cellpadding' => 0,
+		'cellspacing' => 0,
+		'border'      => 0,
+		'role'        => 'presentation',
+		'style'       => [
+			'max-width'       => '100%',
+			'mso-cellspacing' => '0px',
+			'mso-padding-alt' => '0px 0px 0px 0px'
+		],
+	];
+
+	public static function buildLink(string $text, string $href):ElemNode
 	{
 		return ElemNode::new('a')
 		               ->attrs(['href' => $href, 'target' => '_blank'])
@@ -23,7 +36,7 @@ trait buildsNodes
 	/**
 	 * @param array $padding
 	 * @param NodeBuilder[] $children_
-	 * @return NodeBuilder|NodeCollection
+	 * @return NodeBuilder|\NodeBuilder\Extensions\NodeCollection
 	 */
 	public static function buildPadded(array $padding, array $children_):NodeCollection
 	{
@@ -70,7 +83,9 @@ trait buildsNodes
 
 	public static function buildTable(array $mergeAttrs = [], array $mergeStyles = []):ElemNode
 	{
-		return ElemNode::new('table')->attrs(getTableAttrs($mergeAttrs, $mergeStyles));
+		return ElemNode::new('table')
+		               ->attrs(static::$TABLE_ATTRS, $mergeAttrs)
+		               ->style($mergeStyles);
 	}
 
 	/**
@@ -80,10 +95,9 @@ trait buildsNodes
 	public static function buildRowPadding($height):ElemNode
 	{
 		return ElemNode::new('tr')->addChild(
-			ElemNode::new('td')->attrs([
-				'height' => $height,
-				'style'  => 'font-size:0px'
-			])
+			ElemNode::new('td')
+			        ->attrs(['height' => $height])
+			        ->style(['font-size' => '0px'])
 			        ->useWhitespace(false)
 			        ->addChild(
 				        TextNode::new('&nbsp;')
@@ -169,6 +183,19 @@ trait buildsNodes
 			      ->toDOM(),
 			['nowrap'],
 		);
+	}
+
+	public static function buildImg(string $src, ?string $alt, array $attrs = []):SelfClosingNode
+	{
+		return SelfClosingNode::new('img')->attrs(compact('src', 'alt'), $attrs);
+	}
+
+	public static function buildImgLink(string $src, ?string $alt, string $href, array $img_attrs = []):ElemNode
+	{
+		return ElemNode::new('a')->attrs([
+			'href'   => $href,
+			'target' => '_blank'
+		])->addChild(self::buildImg($src, $alt, $img_attrs));
 	}
 
 	/**

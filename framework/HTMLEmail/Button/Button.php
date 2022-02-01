@@ -2,8 +2,8 @@
 
 namespace HTMLEmail\Button;
 
-use NodeBuilder\ConditionalComment;
-use NodeBuilder\ElemNode;
+use NodeBuilder\Extensions\ConditionalComment;
+use NodeBuilder\Extensions\ElemNode;
 use NodeBuilder\NodeBuilder;
 
 class Button
@@ -68,8 +68,7 @@ class Button
 
 	private function getAStyles():array
 	{
-		return [];
-		return array_merge(
+		return array_replace_recursive(
 			[
 				'display'                  => 'inline-block',
 				'text-align'               => 'center',
@@ -99,11 +98,10 @@ class Button
 
 		$rect->attrs([
 			'href'  => $this->href,
-			'style' => [
-				'height'        => $this->toUnit('height'),
-				'v-text-anchor' => 'middle',
-				'width'         => $this->toUnit('width'),
-			],
+		])->style([
+			'height'        => $this->toUnit('height'),
+			'v-text-anchor' => 'middle',
+			'width'         => $this->toUnit('width'),
 		]);
 
 		if ( $background_image = $this->buttonStyle('background-image') ) {
@@ -134,8 +132,8 @@ class Button
 
 		$a_styles = $this->getAStyles();
 
-		$_a->attrs(['style' => $a_styles]);
-		$_clone_a->attrs(['style' => $a_styles]);
+		$_a->style($a_styles);
+		$_clone_a->style($a_styles);
 
 		if ( $border_color = $this->buttonStyle('border-color') ) {
 			$rect->attrs(['strokecolor' => $border_color]);

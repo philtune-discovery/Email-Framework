@@ -3,16 +3,16 @@
 namespace HTMLEmail;
 
 use HTMLEmail\Container\Container;
-use HTMLEmail\EmailAttributeBuilder\AttributeBuilder;
+use HTMLEmail\EmailAttributeBuilder\EmailAttributeBuilder;
+use NodeBuilder\Extensions\NodeCollection;
 use NodeBuilder\NodeBuilder;
-use NodeBuilder\NodeCollection;
 
 class HTMLEmail
 {
 
 	use buildsNodes;
 	use collectsChildren;
-	use rendersParts;
+	use rendersEmailParts;
 
 	protected string $title;
 	protected Container $container;
@@ -23,13 +23,13 @@ class HTMLEmail
 
 	private function __construct(array $config = [])
 	{
-		NodeBuilder::setAttributeBuilderClass(AttributeBuilder::class);
 		$this->title = $config['title'] ?? 'Email';
 		$this->bgcolor = $config['bgcolor'] ?? '#FFFFFF';
 		$this->txtcolor = $config['txtcolor'] ?? '#000000';
 		$this->previewText($config['preview-text'] ?? null);
 		$this->container = new Container($this, $config['container']);
 		$this->domCollection = NodeCollection::new();
+		NodeBuilder::setAttributeBuilderClass(EmailAttributeBuilder::class);
 	}
 
 	public function previewText(string $previewText):self
